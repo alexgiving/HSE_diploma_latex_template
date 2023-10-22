@@ -1,0 +1,11 @@
+cache
+
+*.log
+*.blg
+*.aux
+*.bbl
+*.toc
+*.gz
+*.fls
+*.fdb_latexmk
+.DS_Store

@@ -1,0 +1,51 @@
+\documentclass[14pt]{extarticle}
+\usepackage[utf8]{inputenc}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\usepackage{algpseudocode}
+\usepackage{geometry}
+\geometry{
+    a4paper,
+    left=30mm,
+    right=10mm,
+    bottom=20mm,
+    top=20mm
+}
+\linespread{1.5}
+
+\usepackage[english, russian]{babel} 
+\usepackage{tempora}                                  
+\usepackage{newtxmath} 
+\usepackage{ragged2e}
+\usepackage{xparse}
+\usepackage{indentfirst}
+
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
+
+
+\let\openbox\relax
+\usepackage{amsthm}
+
+
+
+\begin{document}
+    
+    \include{macros}
+
+    \include{sections/titilepage}
+    \setcounter{page}{2}
+    
+    \tableofcontents
+    
+
+% Include references
+\addcontentsline{toc}{section}{Список литературы}
+\nocite{*}
+\bibliographystyle{ref/IEEEannot}
+\bibliography{ref/annot}
+\end{document}

@@ -15,18 +15,22 @@
 }
 \linespread{1.5}
 
-\usepackage[english, russian]{babel} 
-\usepackage{tempora}                                  
-\usepackage{newtxmath} 
+\usepackage[english, russian]{babel}
+\usepackage{tempora}
+\usepackage{soul, color}
+\usepackage{newtxmath}
 \usepackage{ragged2e}
 \usepackage{xparse}
 \usepackage{indentfirst}
 
 \usepackage{subfigure}
-\usepackage{graphicx}
+\usepackage[]{graphicx}
+
 \usepackage{amsmath}
 \usepackage{booktabs}
+\usepackage{multirow}
 
+\usepackage{hyperref}
 
 \let\openbox\relax
 \usepackage{amsthm}
@@ -34,14 +38,26 @@
 
 
 \begin{document}
-    
+
     \include{macros}
 
     \include{sections/titilepage}
     \setcounter{page}{2}
-    
+
     \tableofcontents
-    
+
+    \include{sections/1_introduction}
+
+    \include{sections/2_literature_review}
+
+    \include{sections/3_problem}
+
+    \include{sections/4_methods_experiments}
+
+    \include{sections/5_results}
+
+    \include{sections/6_conclusion}
+
 
 % Include references
 \addcontentsline{toc}{section}{Список литературы}

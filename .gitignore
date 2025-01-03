@@ -9,3 +9,5 @@ cache
 *.fls
 *.fdb_latexmk
 .DS_Store
+main.out
+main.synctex(busy)

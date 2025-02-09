@@ -1,288 +1,459 @@
 \section{Результаты исследования}
 
-Алгоритм \kmeans{} лучше всего работает с данными, которые удовлетворяют следующим условиям: сферические кластеры (данные должны группироваться вокруг $k$ центров кластеров, имея примерно равное расстояние от центров до границ кластеров), равная плотность кластеров (если плотности кластеров сильно различаются, алгоритм может неправильно разделить данные), разделенные кластеры (расстояния между кластерами достаточно большие по сравнению с их собственными радиусами), гомогенные размеры кластеров (алгоритм лучше справляется, когда кластеры имеют похожий размер). В данной работе рассматриваются синтетические наборы, состоящие из смесей нормальных распределений с фиксированным $\Sigma$ и $\mu$. Плотность смеси нормальных распределений:
-\begin{equation*}
-f(x) = \sum_{l=1}^k p_lf_l(x), \quad x=(x^1,x^2, \dots,x^d),  p_l>0, \sum_{l=1}^{k}p_l=1.
-\end{equation*}
+    \paragraph{Влияние метрики Минковского на качество кластеризации}
 
-Для каждого из синтетических наборов данных матрицы ковариаций фиксируются как единичные диагональные матрицы $\Sigma = I_d$.
-С помощью параметра $t$ математические ожидания распределений могут быть сближены или разнесены по правилу:
-\begin{gather*}
-    \mu_i(t) = \mu_i + t( \frac{\sum_{j=1}^{k}\mu_j}{k} - \mu_i), \quad 0 \leq t \leq 1, \forall i \in [1, k]
-\end{gather*}.
-
-Пусть $\alpha = \frac{|Y|}{|X|}$ -- коэффициент размеченных данных в диапазоне от 0 (в данных нет меток) до 1 (все данные размечены). В данной работе исследуются параметры $\alpha \in [0, 0.2]$ для анализа качества кластеризации с частичным использованием учителя.
+    В качестве методов предобработки были исследованы следующие методы:
+    \begin{itemize}
+        \item Locally Linear Embedding (LLE),
+        \item Multidimensional Scaling (MDS),
+        \item Principal Component Analysis (PCA),
+        \item Spectral Embeddings (SE),
+        \item Uniform Manifold Approximation and Projection (UMAP).
+    \end{itemize}
 
 
-\subsection{Эксперимент с 2 кластерами}
-    Для синтетического набора, состоящего из смеси 2 нормальных распределений, заданы математические ожидания по правилу:
-    \begin{gather*}
-        \mu_1 = (-4, 0 , 0, \dots) \\
-        \mu_2 = (4, 0, 0, \dots).
-    \end{gather*}
-
-    \paragraph{Метрика Минковского с параметром $p=2$}
-    Результаты работа алгоритма кластеризации для метрики Минковского с параметром $p=2$ на данных, состоящих из 2 кластеров с коэффициентом сближения $t=0.8$, представлены на рисунке \ref{fig:n2:m2:alpha_influence}. Алгоритм HardSSLKMeans с фиксацией объектов с известными метками в их кластерах показывает значительно лучшую скорость схождения, а также более высокие результаты по всем рассматриваемым метрикам: \textit{Accuracy}, \textit{ARI}, \textit{AMI}, \textit{NMI}. Очевидно, что при добавлении учителя качество кластеризации должно улучшаться.
-    В таблице \ref{tab:n2:m2:alpha_influence} представлено сравнение числовых значений рассматриваемых метрик. HardSSLKMeans показал \textit{Accuracy} 0.77, что на 67.39\% лучше алгоритма кластеризации без использования учителя.
-
-        \begin{figure}[H]\centering
-            \subfigure[]{
-                \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_accuracy.png}
-                \label{subfig:n2:m2:accuracy}
-            }
-            \subfigure[]{
-                \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ari.png}
-                \label{subfig:n2:m2:ari}
-            }
-            \subfigure[]{
-                \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ami.png}
-                \label{subfig:n2:m2:ami}
-            }
-            \subfigure[]{
-                \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_nmi.png}
-                \label{subfig:n2:m2:nmi}
-            }
-            \subfigure[]{
-                \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_time.png}
-                \label{subfig:n2:m2:time}
-            }
-            \caption{Влияние $\alpha$ на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=2$. Результаты для
-                \subref{subfig:n2:m2:accuracy} Accuracy;
-                \subref{subfig:n2:m2:ari} ARI;
-                \subref{subfig:n2:m2:ami} AMI;
-                \subref{subfig:n2:m2:nmi} NMI, а также на время работы алгоритма \subref{subfig:n2:m2:time}.
-            }
-        \label{fig:n2:m2:alpha_influence}
-        \end{figure}
-
-        \begin{table}[H]
-            \centering
-            \caption{Результаты эксперимента кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=2$}
-            \label{tab:n2:m2:alpha_influence}
-
-            \begin{tabular}{lrrrrrrrr}
-
-                \toprule
-                \bfseries Алгоритм &
-                \bfseries $\alpha$ &
-                \bfseries Accuracy &
-                \bfseries ARI &
-                \bfseries AMI &
-                \bfseries NMI &
-                \bfseries Время \\
-
-                \midrule
-                LKMeans & 0 & 0.46 & 0.00 & 0.00 & 0.00 & 0.02 \\
-                \midrule
-                HardSSLKMeans & 0.1  & 0.68 & 0.12 & 0.09 & 0.10 & 0.02 \\
-                & 0.15  & \bfseries 0.77 & \bfseries 0.28 & 0.22 & 0.22 & 0.02 \\
-                & 0.2  & 0.74 & 0.26 & \bfseries 0.22 & \bfseries 0.25 & \bfseries 0.02 \\
-                \midrule
-                SoftSSLKMeans & 0.1  & 0.53 & 0.00 & 0.00 & 0.00 & 0.02 \\
-                & 0.15  & 0.69 & 0.14 & 0.10 & 0.11 & 0.02 \\
-                & 0.2 & 0.69 & 0.14 & 0.10 & 0.11 & 0.02 \\
-
-                \bottomrule
-            \end{tabular}
-        \end{table}
-
-
-    \paragraph{Метрика Минковского $0 < p < 1$}
-    Результаты работа алгоритма кластеризации для метрики Минковского с параметром $p=0.5$ на данных, состоящих из 2 кластеров с коэффициентом сближения $t=0.8$, представлены на рисунке \ref{fig:n2:m0.5:alpha_influence}. Алгоритм HardSSLKMeans с фиксацией объектов с известными метками в их кластерах показывает лучшие результаты. При $\alpha = 0.15$ оба алгоритма HardSSLKMeans и SoftSSLKMeans показывают сравнимые результаты. При $\alpha=0.2$ HardSSLKMeans опережает \kmeans{} и SoftSSLKMeans на 48.89\% и 4.68\% соответственно.
-
-        \begin{figure}[H]\centering
-            \subfigure[]{
-                \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_accuracy.png}
-                \label{subfig:n2:m0.5:accuracy}
-            }
-            \subfigure[]{
-                \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ari.png}
-                \label{subfig:n2:m0.5:ari}
-            }
-            \subfigure[]{
-                \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ami.png}
-                \label{subfig:n2:m0.5:ami}
-            }
-            \subfigure[]{
-                \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_nmi.png}
-                \label{subfig:n2:m0.5:nmi}
-            }
-            \subfigure[]{
-                \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_time.png}
-                \label{subfig:n2:m0.5:time}
-            }
-            \caption{Влияние $\alpha$ на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=0.5$. Результаты для
-                \subref{subfig:n2:m0.5:accuracy} Accuracy;
-                \subref{subfig:n2:m0.5:ari} ARI;
-                \subref{subfig:n2:m0.5:ami} AMI;
-                \subref{subfig:n2:m0.5:nmi} NMI, а также на время работы алгоритма \subref{subfig:n2:m0.5:time}.
-            }
-        \label{fig:n2:m0.5:alpha_influence}
-        \end{figure}
-
-        \begin{table}[H]
-            \centering
-            \caption{Результаты эксперимента кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=0.5$}
-            \label{tab:n2:m0.5:alpha_influence}
-
-            \begin{tabular}{lrrrrrrrr}
-
-                \toprule
-                \bfseries Алгоритм &
-                \bfseries $\alpha$ &
-                \bfseries Accuracy &
-                \bfseries ARI &
-                \bfseries AMI &
-                \bfseries NMI &
-                \bfseries Время \\
-
-                \midrule
-                LKMeans & 0 & 0.45 & 0.00 & 0.00 & 0.01 & 0.19 \\
-                \midrule
-                HardSSLKMeans & 0.1  & 0.63 & 0.06 & 0.04 & 0.05 & 0.19 \\
-                & 0.15 & 0.66 & \bfseries 0.09 & 0.07 & 0.08 & 0.18 \\
-                & 0.2 & \bfseries 0.67 & 0.08 & \bfseries 0.07 & \bfseries 0.08 & \bfseries 0.18 \\
-                \midrule
-                SoftSSLKMeans & 0.1  & 0.61 & 0.04 & 0.03 & 0.04 & 0.21 \\
-                & 0.15 & 0.66 & 0.09 & 0.07 & 0.08 & 0.21 \\
-                & 0.2 & 0.64 & 0.08 & 0.07 & 0.07 & 0.22 \\
-
-                \bottomrule
-            \end{tabular}
-        \end{table}
-
-\subsection{Эксперимент с 3 кластерами}
-    Для синтетического набора, состоящего из смеси 3 нормальных распределений, заданы математические ожидания по правилу:
-    \begin{gather*}
-        \mu_1 = (4, 0, 0, \dots) \\
-        \mu_2 = (0, 4, 0, \dots) \\
-        \mu_3 = (0, 0, 4, \dots).
-    \end{gather*}
-
-    \paragraph{Метрика Минковского с параметром $p=2$}
-    Для данных из 3 кластеров с коэффициентом сближения $t=0.8$ результаты работа алгоритма кластеризации для метрики Минковского с параметром $p=0.5$ представлены на рисунке \ref{fig:n3:m0.5:alpha_influence} и в таблице \ref{fig:n3:m0.5:alpha_influence}. Лучший результат по метрикам точности достигается при использовании алгоритма \textit{SoftSSLKMeans} с параметром $\alpha=0.2$. В сравнении с алгоритмом \kmeans{} метрика \textit{Accuracy} улучшается на 84.38\%, \textit{ARI} и \textit{NMI} улучшаются в 14 раз, \textit{AMI} улучшается в 12 раз.
+    На всех графиках видно, что качество кластеризации (AMI и ARI) зависит как от выбора параметра \(p\).
 
     \begin{figure}[H]\centering
         \subfigure[]{
-            \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_accuracy.png}
-            \label{subfig:n3:m2:accuracy}
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_ami.png}
+            \label{subfig:clusters_2:t_0.4:lle:ami}
         }
         \subfigure[]{
-            \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ari.png}
-            \label{subfig:n3:m2:ari}
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_ari.png}
+            \label{subfig:clusters_2:t_0.4:lle:ari}
         }
         \subfigure[]{
-            \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ami.png}
-            \label{subfig:n3:m2:ami}
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_nmi.png}
+            \label{subfig:clusters_2:t_0.4:lle:nmi}
         }
         \subfigure[]{
-            \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_nmi.png}
-            \label{subfig:n3:m2:nmi}
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_time.png}
+            \label{subfig:clusters_2:t_0.4:lle:time}
         }
-        \subfigure[]{
-            \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_time.png}
-            \label{subfig:n3:m2:time}
+        \caption{Влияние параметра расстояния Минковского \(p\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). LLE используется в качестве метода снижения размерности. Результаты для
+            \subref{subfig:clusters_2:t_0.4:lle:ami} AMI;
+            \subref{subfig:clusters_2:t_0.4:lle:ari} ARI;
+            \subref{subfig:clusters_2:t_0.4:lle:nmi} NMI, а также на время работы алгоритма \subref{subfig:clusters_2:t_0.4:lle:time}.
         }
-        \caption{Влияние $\alpha$ на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 3 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=0.5$. Результаты для
-            \subref{subfig:n3:m2:accuracy} Accuracy;
-            \subref{subfig:n3:m2:ari} ARI;
-            \subref{subfig:n3:m2:ami} AMI;
-            \subref{subfig:n3:m2:nmi} NMI, а также на время работы алгоритма \subref{subfig:n3:m2:time}.
-        }
-    \label{fig:n3:m2:alpha_influence}
+        \label{subfig:clusters_2:t_0.4:lle:metric}
     \end{figure}
 
-    \begin{table}[H]
-        \centering
-        \caption{Результаты эксперимента кластеризации 100 20-мерных объектов, сгенерированных вокруг 3 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=2$}
-        \label{tab:n3:m2:alpha_influence}
 
-        \begin{tabular}{lrrrrrrrr}
+    \begin{figure}[H]\centering
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_ami.png}
+            \label{subfig:clusters_2:t_0.4:mds:ami}
+        }
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_ari.png}
+            \label{subfig:clusters_2:t_0.4:mds:ari}
+        }
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_nmi.png}
+            \label{subfig:clusters_2:t_0.4:mds:nmi}
+        }
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_time.png}
+            \label{subfig:clusters_2:t_0.4:mds:time}
+        }
+        \caption{Влияние параметра расстояния Минковского \(p\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). MDS используется в качестве метода снижения размерности. Результаты для
+            \subref{subfig:clusters_2:t_0.4:mds:ami} AMI;
+            \subref{subfig:clusters_2:t_0.4:mds:ari} ARI;
+            \subref{subfig:clusters_2:t_0.4:mds:nmi} NMI, а также на время работы алгоритма \subref{subfig:clusters_2:t_0.4:mds:time}.
+        }
+        \label{subfig:clusters_2:t_0.4:mds:metric}
+    \end{figure}
 
-            \toprule
-            \bfseries Алгоритм &
-            \bfseries $\alpha$ &
-            \bfseries Accuracy &
-            \bfseries ARI &
-            \bfseries AMI &
-            \bfseries NMI &
-            \bfseries Время \\
 
-            \midrule
-            LKMeans & 0 & 0.32 & 0.01 & 0.01 & 0.01 & 0.04 \\
-            \midrule
-            HardSSLKMeans & 0.1 & 0.34 & 0.00 & 0.01 & 0.02 & 0.04 \\
-            & 0.15 & 0.43 & 0.04 & 0.03 & 0.05 & 0.03 \\
-            & 0.2 & 0.33 & 0.00 & 0.00 & 0.02 & \bfseries 0.03 \\
-            \midrule
-            SoftSSLKMeans & 0.1  & 0.51 & 0.06 & 0.06 & 0.08 & 0.04 \\
-            & 0.15 & 0.53 & 0.07 & 0.09 & 0.011 & 0.03 \\
-            & 0.2 & \bfseries 0.59 & \bfseries 0.14 & \bfseries 0.12 & \bfseries 0.14 & 0.03 \\
 
-            \bottomrule
-        \end{tabular}
-    \end{table}
+    \begin{figure}[H]\centering
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_ami.png}
+            \label{subfig:clusters_2:t_0.4:pca:ami}
+        }
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_ari.png}
+            \label{subfig:clusters_2:t_0.4:pca:ari}
+        }
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_nmi.png}
+            \label{subfig:clusters_2:t_0.4:pca:nmi}
+        }
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_time.png}
+            \label{subfig:clusters_2:t_0.4:pca:time}
+        }
+        \caption{Влияние параметра расстояния Минковского \(p\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). PCA используется в качестве метода снижения размерности. Результаты для
+            \subref{subfig:clusters_2:t_0.4:pca:ami} AMI;
+            \subref{subfig:clusters_2:t_0.4:pca:ari} ARI;
+            \subref{subfig:clusters_2:t_0.4:pca:nmi} NMI, а также на время работы алгоритма \subref{subfig:clusters_2:t_0.4:pca:time}.
+        }
+        \label{subfig:clusters_2:t_0.4:pca:metric}
+    \end{figure}
 
-    \paragraph{Метрика Минковского $0 < p < 1$}
-        Для данных из 3 кластеров с коэффициентом сближения $t=0.8$ результаты работа алгоритма кластеризации для метрики Минковского с параметром $p=0.5$ представлены на рисунке \ref{fig:n3:m0.5:alpha_influence} и в таблице \ref{fig:n3:m0.5:alpha_influence}. Лучший результат по метрикам точности достигается при использовании алгоритма \textit{HardSSLKMeans} с параметром $\alpha=0.2$. В сравнении с алгоритмом \kmeans{} метрика \textit{Accuracy} улучшается в 2.04 раза, \textit{ARI} улучшается на 16.67\%, \textit{AMI} улучшается на 20\%, \textit{NMI} улучшается на 14.29\%. Наибольшее сокращение времени работы алгоритма на 11.11\% достигается при $\alpha=0.1$.
 
-        \begin{figure}[H]\centering
-            \subfigure[]{
-                \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_accuracy.png}
-                \label{subfig:n3:m0.5:accuracy}
-            }
-            \subfigure[]{
-                \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ari.png}
-                \label{subfig:n3:m0.5:ari}
-            }
-            \subfigure[]{
-                \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ami.png}
-                \label{subfig:n3:m0.5:ami}
-            }
-            \subfigure[]{
-                \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_nmi.png}
-                \label{subfig:n3:m0.5:nmi}
-            }
-            \subfigure[]{
-                \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_time.png}
-                \label{subfig:n3:m0.5:time}
-            }
-            \caption{Влияние $\alpha$ на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 3 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=0.5$. Результаты для
-                \subref{subfig:n3:m0.5:accuracy} Accuracy;
-                \subref{subfig:n3:m0.5:ari} ARI;
-                \subref{subfig:n3:m0.5:ami} AMI;
-                \subref{subfig:n3:m0.5:nmi} NMI, а также на время работы алгоритма \subref{subfig:n3:m0.5:time}.
-            }
-        \label{fig:n3:m0.5:alpha_influence}
-        \end{figure}
+    \begin{figure}[H]\centering
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_ami.png}
+            \label{subfig:clusters_2:t_0.4:spectral_embeddings:ami}
+        }
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_ari.png}
+            \label{subfig:clusters_2:t_0.4:spectral_embeddings:ari}
+        }
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_nmi.png}
+            \label{subfig:clusters_2:t_0.4:spectral_embeddings:nmi}
+        }
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_time.png}
+            \label{subfig:clusters_2:t_0.4:spectral_embeddings:time}
+        }
+        \caption{Влияние параметра расстояния Минковского \(p\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). SE используется в качестве метода снижения размерности. Результаты для
+            \subref{subfig:clusters_2:t_0.4:spectral_embeddings:ami} AMI;
+            \subref{subfig:clusters_2:t_0.4:spectral_embeddings:ari} ARI;
+            \subref{subfig:clusters_2:t_0.4:spectral_embeddings:nmi} NMI, а также на время работы алгоритма \subref{subfig:clusters_2:t_0.4:spectral_embeddings:time}.
+        }
+        \label{subfig:clusters_2:t_0.4:spectral_embeddings:metric}
+    \end{figure}
 
-        \begin{table}[H]
-            \centering
-            \caption{Результаты эксперимента кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=0.5$}
-            \label{tab:n3:m0.5:alpha_influence}
 
-            \begin{tabular}{lrrrrrrrr}
+    \begin{figure}[H]\centering
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_ami.png}
+            \label{subfig:clusters_2:t_0.4:umap:ami}
+        }
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_ari.png}
+            \label{subfig:clusters_2:t_0.4:umap:ari}
+        }
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_nmi.png}
+            \label{subfig:clusters_2:t_0.4:umap:nmi}
+        }
+        \subfigure[]{
+            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_time.png}
+            \label{subfig:clusters_2:t_0.4:umap:time}
+        }
+        \caption{Влияние параметра расстояния Минковского \(p\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). UMAP используется в качестве метода снижения размерности. Результаты для
+            \subref{subfig:clusters_2:t_0.4:umap:ami} AMI;
+            \subref{subfig:clusters_2:t_0.4:umap:ari} ARI;
+            \subref{subfig:clusters_2:t_0.4:umap:nmi} NMI, а также на время работы алгоритма \subref{subfig:clusters_2:t_0.4:umap:time}.
+        }
+        \label{subfig:clusters_2:t_0.4:umap:metric}
+    \end{figure}
 
-                \toprule
-                \bfseries Алгоритм &
-                \bfseries $\alpha$ &
-                \bfseries Accuracy &
-                \bfseries ARI &
-                \bfseries AMI &
-                \bfseries NMI &
-                \bfseries Время \\
 
-                \midrule
-                LKMeans & 0 & 0.25 & 0.06 & 0.05 & 0.07 & 0.20 \\
-                \midrule
-                HardSSLKMeans & 0.1  & 0.33 & 0.02 & 0.02 & 0.04 & \bfseries 0.18 \\
-                & 0.15 & 0.34 & 0.03 & 0.02 & 0.04 & 0.20 \\
-                & 0.2 & \bfseries 0.51 & \bfseries 0.07 & \bfseries 0.06 & \bfseries 0.08 & 0.20 \\
-                \midrule
-                SoftSSLKMeans & 0.1 & 0.27 & 0.00 & 0.01 & 0.03 & 0.26 \\
-                & 0.15 & 0.41 & 0.01 & 0.01 & 0.03 & 0.23 \\
-                & 0.2 & 0.41 & 0.00 & 0.00 & 0.02 & 0.23 \\
 
-                \bottomrule
-            \end{tabular}
-        \end{table}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% Алгоритм \kmeans{} лучше всего работает с данными, которые удовлетворяют следующим условиям: сферические кластеры (данные должны группироваться вокруг $k$ центров кластеров, имея примерно равное расстояние от центров до границ кластеров), равная плотность кластеров (если плотности кластеров сильно различаются, алгоритм может неправильно разделить данные), разделенные кластеры (расстояния между кластерами достаточно большие по сравнению с их собственными радиусами), гомогенные размеры кластеров (алгоритм лучше справляется, когда кластеры имеют похожий размер). В данной работе рассматриваются синтетические наборы, состоящие из смесей нормальных распределений с фиксированным $\Sigma$ и $\mu$. Плотность смеси нормальных распределений:
+% \begin{equation*}
+% f(x) = \sum_{l=1}^k p_lf_l(x), \quad x=(x^1,x^2, \dots,x^d),  p_l>0, \sum_{l=1}^{k}p_l=1.
+% \end{equation*}
+
+% Для каждого из синтетических наборов данных матрицы ковариаций фиксируются как единичные диагональные матрицы $\Sigma = I_d$.
+% С помощью параметра $t$ математические ожидания распределений могут быть сближены или разнесены по правилу:
+% \begin{gather*}
+%     \mu_i(t) = \mu_i + t( \frac{\sum_{j=1}^{k}\mu_j}{k} - \mu_i), \quad 0 \leq t \leq 1, \forall i \in [1, k]
+% \end{gather*}.
+
+% Пусть $\alpha = \frac{|Y|}{|X|}$ -- коэффициент размеченных данных в диапазоне от 0 (в данных нет меток) до 1 (все данные размечены). В данной работе исследуются параметры $\alpha \in [0, 0.2]$ для анализа качества кластеризации с частичным использованием учителя.
+
+
+% \subsection{Эксперимент с 2 кластерами}
+%     Для синтетического набора, состоящего из смеси 2 нормальных распределений, заданы математические ожидания по правилу:
+%     \begin{gather*}
+%         \mu_1 = (-4, 0 , 0, \dots) \\
+%         \mu_2 = (4, 0, 0, \dots).
+%     \end{gather*}
+
+%     \paragraph{Метрика Минковского с параметром $p=2$}
+%     Результаты работа алгоритма кластеризации для метрики Минковского с параметром $p=2$ на данных, состоящих из 2 кластеров с коэффициентом сближения $t=0.8$, представлены на рисунке \ref{fig:n2:m2:alpha_influence}. Алгоритм HardSSLKMeans с фиксацией объектов с известными метками в их кластерах показывает значительно лучшую скорость схождения, а также более высокие результаты по всем рассматриваемым метрикам: \textit{Accuracy}, \textit{ARI}, \textit{AMI}, \textit{NMI}. Очевидно, что при добавлении учителя качество кластеризации должно улучшаться.
+%     В таблице \ref{tab:n2:m2:alpha_influence} представлено сравнение числовых значений рассматриваемых метрик. HardSSLKMeans показал \textit{Accuracy} 0.77, что на 67.39\% лучше алгоритма кластеризации без использования учителя.
+
+%         \begin{figure}[H]\centering
+%             \subfigure[]{
+%                 \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_accuracy.png}
+%                 \label{subfig:n2:m2:accuracy}
+%             }
+%             \subfigure[]{
+%                 \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ari.png}
+%                 \label{subfig:n2:m2:ari}
+%             }
+%             \subfigure[]{
+%                 \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ami.png}
+%                 \label{subfig:n2:m2:ami}
+%             }
+%             \subfigure[]{
+%                 \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_nmi.png}
+%                 \label{subfig:n2:m2:nmi}
+%             }
+%             \subfigure[]{
+%                 \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_time.png}
+%                 \label{subfig:n2:m2:time}
+%             }
+%             \caption{Влияние $\alpha$ на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=2$. Результаты для
+%                 \subref{subfig:n2:m2:accuracy} Accuracy;
+%                 \subref{subfig:n2:m2:ari} ARI;
+%                 \subref{subfig:n2:m2:ami} AMI;
+%                 \subref{subfig:n2:m2:nmi} NMI, а также на время работы алгоритма \subref{subfig:n2:m2:time}.
+%             }
+%         \label{fig:n2:m2:alpha_influence}
+%         \end{figure}
+
+%         \begin{table}[H]
+%             \centering
+%             \caption{Результаты эксперимента кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=2$}
+%             \label{tab:n2:m2:alpha_influence}
+
+%             \begin{tabular}{lrrrrrrrr}
+
+%                 \toprule
+%                 \bfseries Алгоритм &
+%                 \bfseries $\alpha$ &
+%                 \bfseries Accuracy &
+%                 \bfseries ARI &
+%                 \bfseries AMI &
+%                 \bfseries NMI &
+%                 \bfseries Время \\
+
+%                 \midrule
+%                 LKMeans & 0 & 0.46 & 0.00 & 0.00 & 0.00 & 0.02 \\
+%                 \midrule
+%                 HardSSLKMeans & 0.1  & 0.68 & 0.12 & 0.09 & 0.10 & 0.02 \\
+%                 & 0.15  & \bfseries 0.77 & \bfseries 0.28 & 0.22 & 0.22 & 0.02 \\
+%                 & 0.2  & 0.74 & 0.26 & \bfseries 0.22 & \bfseries 0.25 & \bfseries 0.02 \\
+%                 \midrule
+%                 SoftSSLKMeans & 0.1  & 0.53 & 0.00 & 0.00 & 0.00 & 0.02 \\
+%                 & 0.15  & 0.69 & 0.14 & 0.10 & 0.11 & 0.02 \\
+%                 & 0.2 & 0.69 & 0.14 & 0.10 & 0.11 & 0.02 \\
+
+%                 \bottomrule
+%             \end{tabular}
+%         \end{table}
+
+
+%     \paragraph{Метрика Минковского $0 < p < 1$}
+%     Результаты работа алгоритма кластеризации для метрики Минковского с параметром $p=0.5$ на данных, состоящих из 2 кластеров с коэффициентом сближения $t=0.8$, представлены на рисунке \ref{fig:n2:m0.5:alpha_influence}. Алгоритм HardSSLKMeans с фиксацией объектов с известными метками в их кластерах показывает лучшие результаты. При $\alpha = 0.15$ оба алгоритма HardSSLKMeans и SoftSSLKMeans показывают сравнимые результаты. При $\alpha=0.2$ HardSSLKMeans опережает \kmeans{} и SoftSSLKMeans на 48.89\% и 4.68\% соответственно.
+
+%         \begin{figure}[H]\centering
+%             \subfigure[]{
+%                 \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_accuracy.png}
+%                 \label{subfig:n2:m0.5:accuracy}
+%             }
+%             \subfigure[]{
+%                 \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ari.png}
+%                 \label{subfig:n2:m0.5:ari}
+%             }
+%             \subfigure[]{
+%                 \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ami.png}
+%                 \label{subfig:n2:m0.5:ami}
+%             }
+%             \subfigure[]{
+%                 \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_nmi.png}
+%                 \label{subfig:n2:m0.5:nmi}
+%             }
+%             \subfigure[]{
+%                 \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_2_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_time.png}
+%                 \label{subfig:n2:m0.5:time}
+%             }
+%             \caption{Влияние $\alpha$ на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=0.5$. Результаты для
+%                 \subref{subfig:n2:m0.5:accuracy} Accuracy;
+%                 \subref{subfig:n2:m0.5:ari} ARI;
+%                 \subref{subfig:n2:m0.5:ami} AMI;
+%                 \subref{subfig:n2:m0.5:nmi} NMI, а также на время работы алгоритма \subref{subfig:n2:m0.5:time}.
+%             }
+%         \label{fig:n2:m0.5:alpha_influence}
+%         \end{figure}
+
+%         \begin{table}[H]
+%             \centering
+%             \caption{Результаты эксперимента кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=0.5$}
+%             \label{tab:n2:m0.5:alpha_influence}
+
+%             \begin{tabular}{lrrrrrrrr}
+
+%                 \toprule
+%                 \bfseries Алгоритм &
+%                 \bfseries $\alpha$ &
+%                 \bfseries Accuracy &
+%                 \bfseries ARI &
+%                 \bfseries AMI &
+%                 \bfseries NMI &
+%                 \bfseries Время \\
+
+%                 \midrule
+%                 LKMeans & 0 & 0.45 & 0.00 & 0.00 & 0.01 & 0.19 \\
+%                 \midrule
+%                 HardSSLKMeans & 0.1  & 0.63 & 0.06 & 0.04 & 0.05 & 0.19 \\
+%                 & 0.15 & 0.66 & \bfseries 0.09 & 0.07 & 0.08 & 0.18 \\
+%                 & 0.2 & \bfseries 0.67 & 0.08 & \bfseries 0.07 & \bfseries 0.08 & \bfseries 0.18 \\
+%                 \midrule
+%                 SoftSSLKMeans & 0.1  & 0.61 & 0.04 & 0.03 & 0.04 & 0.21 \\
+%                 & 0.15 & 0.66 & 0.09 & 0.07 & 0.08 & 0.21 \\
+%                 & 0.2 & 0.64 & 0.08 & 0.07 & 0.07 & 0.22 \\
+
+%                 \bottomrule
+%             \end{tabular}
+%         \end{table}
+
+% \subsection{Эксперимент с 3 кластерами}
+%     Для синтетического набора, состоящего из смеси 3 нормальных распределений, заданы математические ожидания по правилу:
+%     \begin{gather*}
+%         \mu_1 = (4, 0, 0, \dots) \\
+%         \mu_2 = (0, 4, 0, \dots) \\
+%         \mu_3 = (0, 0, 4, \dots).
+%     \end{gather*}
+
+%     \paragraph{Метрика Минковского с параметром $p=2$}
+%     Для данных из 3 кластеров с коэффициентом сближения $t=0.8$ результаты работа алгоритма кластеризации для метрики Минковского с параметром $p=0.5$ представлены на рисунке \ref{fig:n3:m0.5:alpha_influence} и в таблице \ref{fig:n3:m0.5:alpha_influence}. Лучший результат по метрикам точности достигается при использовании алгоритма \textit{SoftSSLKMeans} с параметром $\alpha=0.2$. В сравнении с алгоритмом \kmeans{} метрика \textit{Accuracy} улучшается на 84.38\%, \textit{ARI} и \textit{NMI} улучшаются в 14 раз, \textit{AMI} улучшается в 12 раз.
+
+%     \begin{figure}[H]\centering
+%         \subfigure[]{
+%             \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_accuracy.png}
+%             \label{subfig:n3:m2:accuracy}
+%         }
+%         \subfigure[]{
+%             \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ari.png}
+%             \label{subfig:n3:m2:ari}
+%         }
+%         \subfigure[]{
+%             \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ami.png}
+%             \label{subfig:n3:m2:ami}
+%         }
+%         \subfigure[]{
+%             \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_nmi.png}
+%             \label{subfig:n3:m2:nmi}
+%         }
+%         \subfigure[]{
+%             \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_2_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_time.png}
+%             \label{subfig:n3:m2:time}
+%         }
+%         \caption{Влияние $\alpha$ на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 3 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=0.5$. Результаты для
+%             \subref{subfig:n3:m2:accuracy} Accuracy;
+%             \subref{subfig:n3:m2:ari} ARI;
+%             \subref{subfig:n3:m2:ami} AMI;
+%             \subref{subfig:n3:m2:nmi} NMI, а также на время работы алгоритма \subref{subfig:n3:m2:time}.
+%         }
+%     \label{fig:n3:m2:alpha_influence}
+%     \end{figure}
+
+%     \begin{table}[H]
+%         \centering
+%         \caption{Результаты эксперимента кластеризации 100 20-мерных объектов, сгенерированных вокруг 3 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=2$}
+%         \label{tab:n3:m2:alpha_influence}
+
+%         \begin{tabular}{lrrrrrrrr}
+
+%             \toprule
+%             \bfseries Алгоритм &
+%             \bfseries $\alpha$ &
+%             \bfseries Accuracy &
+%             \bfseries ARI &
+%             \bfseries AMI &
+%             \bfseries NMI &
+%             \bfseries Время \\
+
+%             \midrule
+%             LKMeans & 0 & 0.32 & 0.01 & 0.01 & 0.01 & 0.04 \\
+%             \midrule
+%             HardSSLKMeans & 0.1 & 0.34 & 0.00 & 0.01 & 0.02 & 0.04 \\
+%             & 0.15 & 0.43 & 0.04 & 0.03 & 0.05 & 0.03 \\
+%             & 0.2 & 0.33 & 0.00 & 0.00 & 0.02 & \bfseries 0.03 \\
+%             \midrule
+%             SoftSSLKMeans & 0.1  & 0.51 & 0.06 & 0.06 & 0.08 & 0.04 \\
+%             & 0.15 & 0.53 & 0.07 & 0.09 & 0.011 & 0.03 \\
+%             & 0.2 & \bfseries 0.59 & \bfseries 0.14 & \bfseries 0.12 & \bfseries 0.14 & 0.03 \\
+
+%             \bottomrule
+%         \end{tabular}
+%     \end{table}
+
+%     \paragraph{Метрика Минковского $0 < p < 1$}
+%         Для данных из 3 кластеров с коэффициентом сближения $t=0.8$ результаты работа алгоритма кластеризации для метрики Минковского с параметром $p=0.5$ представлены на рисунке \ref{fig:n3:m0.5:alpha_influence} и в таблице \ref{fig:n3:m0.5:alpha_influence}. Лучший результат по метрикам точности достигается при использовании алгоритма \textit{HardSSLKMeans} с параметром $\alpha=0.2$. В сравнении с алгоритмом \kmeans{} метрика \textit{Accuracy} улучшается в 2.04 раза, \textit{ARI} улучшается на 16.67\%, \textit{AMI} улучшается на 20\%, \textit{NMI} улучшается на 14.29\%. Наибольшее сокращение времени работы алгоритма на 11.11\% достигается при $\alpha=0.1$.
+
+%         \begin{figure}[H]\centering
+%             \subfigure[]{
+%                 \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_accuracy.png}
+%                 \label{subfig:n3:m0.5:accuracy}
+%             }
+%             \subfigure[]{
+%                 \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ari.png}
+%                 \label{subfig:n3:m0.5:ari}
+%             }
+%             \subfigure[]{
+%                 \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_ami.png}
+%                 \label{subfig:n3:m0.5:ami}
+%             }
+%             \subfigure[]{
+%                 \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_nmi.png}
+%                 \label{subfig:n3:m0.5:nmi}
+%             }
+%             \subfigure[]{
+%                 \includegraphics[width=0.3\linewidth]{images/supervision_ratio_influence_|_num-clusters_3_|_minkowski_0.5_|_t_0.8_|_n-points_100_|_dimension_20_|_repeats_10_time.png}
+%                 \label{subfig:n3:m0.5:time}
+%             }
+%             \caption{Влияние $\alpha$ на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 3 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=0.5$. Результаты для
+%                 \subref{subfig:n3:m0.5:accuracy} Accuracy;
+%                 \subref{subfig:n3:m0.5:ari} ARI;
+%                 \subref{subfig:n3:m0.5:ami} AMI;
+%                 \subref{subfig:n3:m0.5:nmi} NMI, а также на время работы алгоритма \subref{subfig:n3:m0.5:time}.
+%             }
+%         \label{fig:n3:m0.5:alpha_influence}
+%         \end{figure}
+
+%         \begin{table}[H]
+%             \centering
+%             \caption{Результаты эксперимента кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров $t=0.8$ и параметром метрики Минковского $p=0.5$}
+%             \label{tab:n3:m0.5:alpha_influence}
+
+%             \begin{tabular}{lrrrrrrrr}
+
+%                 \toprule
+%                 \bfseries Алгоритм &
+%                 \bfseries $\alpha$ &
+%                 \bfseries Accuracy &
+%                 \bfseries ARI &
+%                 \bfseries AMI &
+%                 \bfseries NMI &
+%                 \bfseries Время \\
+
+%                 \midrule
+%                 LKMeans & 0 & 0.25 & 0.06 & 0.05 & 0.07 & 0.20 \\
+%                 \midrule
+%                 HardSSLKMeans & 0.1  & 0.33 & 0.02 & 0.02 & 0.04 & \bfseries 0.18 \\
+%                 & 0.15 & 0.34 & 0.03 & 0.02 & 0.04 & 0.20 \\
+%                 & 0.2 & \bfseries 0.51 & \bfseries 0.07 & \bfseries 0.06 & \bfseries 0.08 & 0.20 \\
+%                 \midrule
+%                 SoftSSLKMeans & 0.1 & 0.27 & 0.00 & 0.01 & 0.03 & 0.26 \\
+%                 & 0.15 & 0.41 & 0.01 & 0.01 & 0.03 & 0.23 \\
+%                 & 0.2 & 0.41 & 0.00 & 0.00 & 0.02 & 0.23 \\
+
+%                 \bottomrule
+%             \end{tabular}
+%         \end{table}

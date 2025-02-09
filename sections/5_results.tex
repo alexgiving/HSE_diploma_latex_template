@@ -1,18 +1,35 @@
 \section{Результаты исследования}
 
-    \paragraph{Влияние метрики Минковского на качество кластеризации}
+Алгоритм \kmeans{} лучше всего работает с данными, которые удовлетворяют следующим условиям: сферические кластеры (данные должны группироваться вокруг \(k\) центров кластеров, имея примерно равное расстояние от центров до границ кластеров), равная плотность кластеров (если плотности кластеров сильно различаются, алгоритм может неправильно разделить данные), разделенные кластеры (расстояния между кластерами достаточно большие по сравнению с их собственными радиусами), гомогенные размеры кластеров (алгоритм лучше справляется, когда кластеры имеют похожий размер). В данной работе рассматриваются синтетические наборы, состоящие из смесей нормальных распределений с фиксированным \(\Sigma\) и \(\mu\). Плотность смеси нормальных распределений:
+\begin{equation*}
+f(x) = \sum_{l=1}^k p_lf_l(x), \quad x=(x^1,x^2, \dots,x^d),  p_l>0, \sum_{l=1}^{k}p_l=1.
+\end{equation*}
 
-    В качестве методов предобработки были исследованы следующие методы:
-    \begin{itemize}
-        \item Locally Linear Embedding (LLE),
-        \item Multidimensional Scaling (MDS),
-        \item Principal Component Analysis (PCA),
-        \item Spectral Embeddings (SE),
-        \item Uniform Manifold Approximation and Projection (UMAP).
-    \end{itemize}
+Для каждого из синтетических наборов данных матрицы ковариаций фиксируются как единичные диагональные матрицы \(\Sigma = I_d\).
+С помощью параметра \(t\) математические ожидания распределений могут быть сближены или разнесены по правилу:
+\begin{gather*}
+    \mu_i(t) = \mu_i + t( \frac{\sum_{j=1}^{k}\mu_j}{k} - \mu_i), \quad 0 \leq t \leq 1, \forall i \in [1, k]
+\end{gather*}.
 
+В качестве методов предобработки были исследованы следующие методы:
+\begin{itemize}
+    \item Locally Linear Embedding (LLE),
+    \item Multidimensional Scaling (MDS),
+    \item Principal Component Analysis (PCA),
+    \item Spectral Embeddings (SE),
+    \item Uniform Manifold Approximation and Projection (UMAP).
+\end{itemize}
 
-    На всех графиках видно, что качество кластеризации (AMI и ARI) зависит как от выбора параметра \(p\).
+\subsection{Эксперимент с 2 кластерами}
+    Для синтетического набора, состоящего из смеси 2 нормальных распределений, заданы математические ожидания по правилу:
+    \begin{gather*}
+        \mu_1 = (-4, 0 , 0, \dots) \\
+        \mu_2 = (4, 0, 0, \dots).
+    \end{gather*}
+
+    \paragraph{Влияние метрики Минковского на качество кластеризации при снижении размерности}
+
+    На графиках ниже представлены результаты экспериментов для различных методов предобработки данных: \ref{subfig:clusters_2:t_0.4:lle:metric} для LLE, \ref{subfig:clusters_2:t_0.4:mds:metric} для MDS, \ref{subfig:clusters_2:t_0.4:pca:metric} для PCA, \ref{subfig:clusters_2:t_0.4:spectral_embeddings:metric} для SE, \ref{subfig:clusters_2:t_0.4:umap:metric} для UMAP.
 
     \begin{figure}[H]\centering
         \subfigure[]{

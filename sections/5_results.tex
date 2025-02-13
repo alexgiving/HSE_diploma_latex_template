@@ -29,23 +29,23 @@ f(x) = \sum_{l=1}^k p_lf_l(x), \quad x=(x^1,x^2, \dots,x^d),  p_l>0, \sum_{l=1}^
 
     \subsubsection{Влияние метрики Минковского на качество кластеризации при снижении размерности}
 
-    На графиках ниже представлены результаты экспериментов по оценке влияния параметра метрики Минковского \(p\) при различных методах предобработки данных: \ref{subfig:clusters_2:t_0.4:lle:metric} для LLE, \ref{subfig:clusters_2:t_0.4:mds:metric} для MDS, \ref{subfig:clusters_2:t_0.4:pca:metric} для PCA, \ref{subfig:clusters_2:t_0.4:spectral_embeddings:metric} для SE, \ref{subfig:clusters_2:t_0.4:umap:metric} для UMAP.
+    На графиках ниже представлены результаты экспериментов по оценке влияния параметра метрики Минковского \(p\) при различных методах предобработки данных: \ref{subfig:clusters_2:t_0.4:lle:metric} для LLE, \ref{subfig:clusters_2:t_0.4:mds:metric} для MDS, \ref{subfig:clusters_2:t_0.4:pca:metric} для PCA, \ref{subfig:clusters_2:t_0.4:spectral_embeddings:metric} для SE, \ref{subfig:clusters_2:t_0.4:umap:metric} для UMAP. Также представлен график поведения различных методов снижения размерности при фиксированом параметре метрики Минковского \(p=0.5\) \ref{subfig:clusters_2:t_0.4:p_0.5:distance}.
 
     \begin{figure}[H]\centering
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_ami.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_ami.png}
             \label{subfig:clusters_2:t_0.4:lle:ami}
         }
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_ari.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_ari.png}
             \label{subfig:clusters_2:t_0.4:lle:ari}
         }
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_nmi.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_nmi.png}
             \label{subfig:clusters_2:t_0.4:lle:nmi}
         }
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_time.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_time.png}
             \label{subfig:clusters_2:t_0.4:lle:time}
         }
         \caption{Влияние параметра расстояния Минковского \(p\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). LLE используется в качестве метода снижения размерности. Результаты для
@@ -59,19 +59,19 @@ f(x) = \sum_{l=1}^k p_lf_l(x), \quad x=(x^1,x^2, \dots,x^d),  p_l>0, \sum_{l=1}^
 
     \begin{figure}[H]\centering
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_ami.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_ami.png}
             \label{subfig:clusters_2:t_0.4:mds:ami}
         }
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_ari.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_ari.png}
             \label{subfig:clusters_2:t_0.4:mds:ari}
         }
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_nmi.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_nmi.png}
             \label{subfig:clusters_2:t_0.4:mds:nmi}
         }
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_time.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_time.png}
             \label{subfig:clusters_2:t_0.4:mds:time}
         }
         \caption{Влияние параметра расстояния Минковского \(p\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). MDS используется в качестве метода снижения размерности. Результаты для
@@ -86,19 +86,19 @@ f(x) = \sum_{l=1}^k p_lf_l(x), \quad x=(x^1,x^2, \dots,x^d),  p_l>0, \sum_{l=1}^
 
     \begin{figure}[H]\centering
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_ami.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_ami.png}
             \label{subfig:clusters_2:t_0.4:pca:ami}
         }
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_ari.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_ari.png}
             \label{subfig:clusters_2:t_0.4:pca:ari}
         }
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_nmi.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_nmi.png}
             \label{subfig:clusters_2:t_0.4:pca:nmi}
         }
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_time.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_time.png}
             \label{subfig:clusters_2:t_0.4:pca:time}
         }
         \caption{Влияние параметра расстояния Минковского \(p\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). PCA используется в качестве метода снижения размерности. Результаты для
@@ -112,19 +112,19 @@ f(x) = \sum_{l=1}^k p_lf_l(x), \quad x=(x^1,x^2, \dots,x^d),  p_l>0, \sum_{l=1}^
 
     \begin{figure}[H]\centering
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_ami.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_ami.png}
             \label{subfig:clusters_2:t_0.4:spectral_embeddings:ami}
         }
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_ari.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_ari.png}
             \label{subfig:clusters_2:t_0.4:spectral_embeddings:ari}
         }
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_nmi.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_nmi.png}
             \label{subfig:clusters_2:t_0.4:spectral_embeddings:nmi}
         }
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_time.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_time.png}
             \label{subfig:clusters_2:t_0.4:spectral_embeddings:time}
         }
         \caption{Влияние параметра расстояния Минковского \(p\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). SE используется в качестве метода снижения размерности. Результаты для
@@ -138,19 +138,19 @@ f(x) = \sum_{l=1}^k p_lf_l(x), \quad x=(x^1,x^2, \dots,x^d),  p_l>0, \sum_{l=1}^
 
     \begin{figure}[H]\centering
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_ami.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_ami.png}
             \label{subfig:clusters_2:t_0.4:umap:ami}
         }
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_ari.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_ari.png}
             \label{subfig:clusters_2:t_0.4:umap:ari}
         }
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_nmi.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_nmi.png}
             \label{subfig:clusters_2:t_0.4:umap:nmi}
         }
         \subfigure[]{
-            \includegraphics[width=0.45\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_time.png}
+            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_time.png}
             \label{subfig:clusters_2:t_0.4:umap:time}
         }
         \caption{Влияние параметра расстояния Минковского \(p\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). UMAP используется в качестве метода снижения размерности. Результаты для
@@ -165,6 +165,37 @@ f(x) = \sum_{l=1}^k p_lf_l(x), \quad x=(x^1,x^2, \dots,x^d),  p_l>0, \sum_{l=1}^
 
 
 
+
+
+
+
+
+
+
+    \begin{figure}[H]\centering
+        \subfigure[]{
+            \includegraphics[width=0.48\linewidth]{images/decomposition_metric/decomposition_metric_t_0.4_p_0.5_comparison_2_clusters_ami.png}
+            \label{subfig:clusters_2:t_0.4:p_0.5:ami}
+        }
+        \subfigure[]{
+            \includegraphics[width=0.48\linewidth]{images/decomposition_metric/decomposition_metric_t_0.4_p_0.5_comparison_2_clusters_ari.png}
+            \label{subfig:clusters_2:t_0.4:p_0.5:ari}
+        }
+        \subfigure[]{
+            \includegraphics[width=0.48\linewidth]{images/decomposition_metric/decomposition_metric_t_0.4_p_0.5_comparison_2_clusters_nmi.png}
+            \label{subfig:clusters_2:t_0.4:p_0.5:nmi}
+        }
+        \subfigure[]{
+            \includegraphics[width=0.48\linewidth]{images/decomposition_metric/decomposition_metric_t_0.4_p_0.5_comparison_2_clusters_time.png}
+            \label{subfig:clusters_2:t_0.4:p_0.5:time}
+        }
+        \caption{Анализ влияния различных методов снижения размерности данных при фиксированном расстояния Минковского \(p=0.5\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). Результаты для
+            \subref{subfig:clusters_2:t_0.4:p_0.5:ami} AMI;
+            \subref{subfig:clusters_2:t_0.4:p_0.5:ari} ARI;
+            \subref{subfig:clusters_2:t_0.4:p_0.5:nmi} NMI, а также на время работы алгоритма \subref{subfig:clusters_2:t_0.4:umap:time}.
+        }
+        \label{subfig:clusters_2:t_0.4:p_0.5:distance}
+    \end{figure}
 
 
 

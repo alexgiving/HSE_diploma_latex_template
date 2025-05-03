@@ -37,33 +37,37 @@
 \usepackage{amsthm}
 
 
+% \begin{document}
+%     \include{macros}
+%     \include{sections/titilepage}
+% \end{document}
+
 
 \begin{document}
 
     \include{macros}
 
-    \include{report_sections/results}
+    % \include{report_sections/results}
 
-    % \include{sections/titilepage}
-    % \setcounter{page}{2}
+    \include{sections/titilepage}
+    \setcounter{page}{2}
 
-    % \tableofcontents
+    \tableofcontents
 
-    % \include{sections/1_introduction}
+    \include{sections/1_introduction}
 
-    % \include{sections/2_literature_review}
-
-
-    % \include{sections/4_methods_experiments}
-
-    % \include{sections/5_results}
-
-    % \include{sections/6_conclusion}
+    \include{sections/2_literature_review}
 
 
-% Include references
-% \addcontentsline{toc}{section}{Список литературы}
-% \nocite{*}
-% \bibliographystyle{ref/IEEEannot}
-% \bibliography{ref/annot}
+    \include{sections/4_methods_experiments}
+
+    \include{sections/5_results}
+
+    \include{sections/6_conclusion}
+
+
+\addcontentsline{toc}{section}{Список литературы}
+\nocite{*}
+\bibliographystyle{ref/IEEEannot}
+\bibliography{ref/annot}
 \end{document}

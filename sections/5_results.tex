@@ -1,201 +1,289 @@
 \section{Результаты исследования}
 
-Алгоритм \kmeans{} лучше всего работает с данными, которые удовлетворяют следующим условиям: сферические кластеры (данные должны группироваться вокруг \(k\) центров кластеров, имея примерно равное расстояние от центров до границ кластеров), равная плотность кластеров (если плотности кластеров сильно различаются, алгоритм может неправильно разделить данные), разделенные кластеры (расстояния между кластерами достаточно большие по сравнению с их собственными радиусами), гомогенные размеры кластеров (алгоритм лучше справляется, когда кластеры имеют похожий размер). В данной работе рассматриваются синтетические наборы, состоящие из смесей нормальных распределений с фиксированным \(\Sigma\) и \(\mu\). Плотность смеси нормальных распределений:
-\begin{equation*}
-f(x) = \sum_{l=1}^k p_lf_l(x), \quad x=(x^1,x^2, \dots,x^d),  p_l>0, \sum_{l=1}^{k}p_l=1.
-\end{equation*}
+    Алгоритм \kmeans{} демонстрирует наилучшие результаты в тех случаях, когда данные обладают рядом специфических характеристик, создающих благоприятные условия для корректной работы метода. Прежде всего, речь идёт о сферической структуре кластеров: каждый кластер должен быть приблизительно симметричным относительно своего центра, а расстояния от центроидов до границ кластера -- примерно одинаковыми. Такая конфигурация обеспечивает чёткую геометрическую интерпретацию центров масс и минимизирует ошибки при расчёте евклидовых расстояний. Не менее важным фактором является сходная плотность данных внутри кластеров. В тех случаях, когда плотность одной группы объектов значительно превышает плотность другой, \kmeans{} может ошибочно объединить разреженные участки или, наоборот, раздробить плотную область на несколько частей. Алгоритм также чувствителен к степени разделённости кластеров: чем больше расстояние между группами по сравнению с их внутренним разбросом, тем выше вероятность корректного выделения кластеров. Последнее, но не менее значимое условие -- однородность размеров кластеров. \kmeans{} предпочитает, чтобы кластеры были схожи по объёму и радиусу, иначе велик риск, что объекты меньшего кластера окажутся <<поглощёнными>> более крупным.
 
-Для каждого из синтетических наборов данных матрицы ковариаций фиксируются как единичные диагональные матрицы \(\Sigma = I_d\).
-С помощью параметра \(t\) математические ожидания распределений могут быть сближены или разнесены по правилу:
-\begin{gather*}
-    \mu_i(t) = \mu_i + t( \frac{\sum_{j=1}^{k}\mu_j}{k} - \mu_i), \quad 0 \leq t \leq 1, \forall i \in [1, k]
-\end{gather*}.
+    В данной работе рассматриваются синтетические наборы, состоящие из смесей нормальных распределений с фиксированным \(\Sigma\) и \(\mu\). Плотность смеси нормальных распределений:
+    \begin{equation*}
+    f(x) = \sum_{l=1}^k p_lf_l(x), \quad x=(x^1,x^2, \dots,x^d),  p_l>0, \sum_{l=1}^{k}p_l=1.
+    \end{equation*}
 
-В качестве методов предобработки были исследованы следующие методы:
-\begin{itemize}
-    \item Locally Linear Embedding (LLE),
-    \item Multidimensional Scaling (MDS),
-    \item Principal Component Analysis (PCA),
-    \item Spectral Embeddings (SE),
-    \item Uniform Manifold Approximation and Projection (UMAP).
-\end{itemize}
-
-\subsection{Эксперимент с 2 кластерами}
-    Для синтетического набора, состоящего из смеси 2 нормальных распределений, заданы математические ожидания по правилу:
+    Для каждого из синтетических наборов данных матрицы ковариаций фиксируются как единичные диагональные матрицы \(\Sigma = I_d\).
+    С помощью параметра \(t\) математические ожидания распределений могут быть сближены или разнесены по правилу:
     \begin{gather*}
-        \mu_1 = (-4, 0 , 0, \dots) \\
-        \mu_2 = (4, 0, 0, \dots).
+        \mu_i(t) = \mu_i + t( \frac{\sum_{j=1}^{k}\mu_j}{k} - \mu_i), \quad 0 \leq t \leq 1, \forall i \in [1, k].
     \end{gather*}
-    Результаты качества кластеризации взяты как среднее значение кластеризации в 100 запусках.
 
-    \subsubsection{Влияние метрики Минковского на качество кластеризации при снижении размерности}
+    С целью получения надежных и воспроизводимых оценок качества кластеризации, результаты проводимых экспериментов были усреднены по 100 независимым запускам алгоритма, каждый из которых начинался с различной инициализации. Такой подход позволяет сгладить влияние случайных факторов, повысить статистическую значимость выводов и оценить стабильность найденных решений.
 
-    На графиках ниже представлены результаты экспериментов по оценке влияния параметра метрики Минковского \(p\) при различных методах предобработки данных: \ref{subfig:clusters_2:t_0.4:lle:metric} для LLE, \ref{subfig:clusters_2:t_0.4:mds:metric} для MDS, \ref{subfig:clusters_2:t_0.4:pca:metric} для PCA, \ref{subfig:clusters_2:t_0.4:spectral_embeddings:metric} для SE, \ref{subfig:clusters_2:t_0.4:umap:metric} для UMAP.
+    \subsection{Эксперименты на синтетических данных}
 
-    \begin{figure}[H]\centering
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_ami.png}
-            \label{subfig:clusters_2:t_0.4:lle:ami}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_ari.png}
-            \label{subfig:clusters_2:t_0.4:lle:ari}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_nmi.png}
-            \label{subfig:clusters_2:t_0.4:lle:nmi}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_locally_linear_embeddingst_0.4_2_clusters_time.png}
-            \label{subfig:clusters_2:t_0.4:lle:time}
-        }
-        \caption{Влияние параметра расстояния Минковского \(p\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). LLE используется в качестве метода снижения размерности. Результаты для
-            \subref{subfig:clusters_2:t_0.4:lle:ami} AMI;
-            \subref{subfig:clusters_2:t_0.4:lle:ari} ARI;
-            \subref{subfig:clusters_2:t_0.4:lle:nmi} NMI, а также на время работы алгоритма \subref{subfig:clusters_2:t_0.4:lle:time}.
-        }
-        \label{subfig:clusters_2:t_0.4:lle:metric}
-    \end{figure}
+        В данной главе рассматриваются синтетические наборы, состоящие из смесей нормальных распределений с фиксированным \(\Sigma\) и \(\mu\). Плотность смеси нормальных распределений:
+        \begin{equation*}
+            f(x) = \sum_{l=1}^k p_lf_l(x), \quad x=(x^1,x^2, \dots,x^d),  p_l>0, \sum_{l=1}^{k}p_l=1.
+        \end{equation*}
 
+        Для синтетических наборов данных матрицы ковариаций фиксируются как единичные диагональные матрицы \(\Sigma = I_d\).
+        С помощью параметра \(t\) математические ожидания распределений могут быть сближены или разнесены по правилу:
+        \begin{gather*}
+            \mu_i(t) = \mu_i + t( \frac{\sum_{j=1}^{k}\mu_j}{k} - \mu_i), \quad 0 \leq t \leq 1, \forall i \in [1, k].
+        \end{gather*}
 
-    \begin{figure}[H]\centering
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_ami.png}
-            \label{subfig:clusters_2:t_0.4:mds:ami}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_ari.png}
-            \label{subfig:clusters_2:t_0.4:mds:ari}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_nmi.png}
-            \label{subfig:clusters_2:t_0.4:mds:nmi}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_mds_0.4_2_clusters_time.png}
-            \label{subfig:clusters_2:t_0.4:mds:time}
-        }
-        \caption{Влияние параметра расстояния Минковского \(p\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). MDS используется в качестве метода снижения размерности. Результаты для
-            \subref{subfig:clusters_2:t_0.4:mds:ami} AMI;
-            \subref{subfig:clusters_2:t_0.4:mds:ari} ARI;
-            \subref{subfig:clusters_2:t_0.4:mds:nmi} NMI, а также на время работы алгоритма \subref{subfig:clusters_2:t_0.4:mds:time}.
-        }
-        \label{subfig:clusters_2:t_0.4:mds:metric}
-    \end{figure}
+        Для синтетического набора, состоящего из смеси 2 нормальных распределений, заданы математические ожидания по правилу:
+        \begin{gather*}
+            \mu_1 = (-4, 0 , 0, \dots) \\
+            \mu_2 = (4, 0, 0, \dots).
+        \end{gather*}
+
+        \subsubsection{Анализ поведения методов снижения кластеризации при снижении числа компонент.}
+            В данной части экспериментов исследуется влияние методов снижения размерности на поведение алгоритма кластеризации \kmeans{} в условиях идеализированной структуры данных. Используемые синтетические выборки построены как смеси нормальных распределений с заранее заданными параметрами: идентичной дисперсией \((\Sigma = I_d)\), равновесными априорными вероятностями кластеров и симметрично расположенными центрами \(\mu_1\) и \(\mu_2\). Это обеспечивает выполнение всех условий, благоприятных для работы алгоритма \kmeans{}: сферичность кластеров, равную плотность и размер, а также чёткое разделение между группами при \(t < 0\). Таким образом, снижение размерности становится единственным фактором, искажающим исходную структуру данных.
+
+            Целью эксперимента является оценка того, насколько каждый из методов снижения размерности способен сохранить разделимость между кластерами при поэтапном сокращении размерности пространства от исходной размерности (20) до экстремально низкой (2).
+
+            На рисунке \ref{fig:synthetic:t_0.4:dim_influence} представлены графики зависимости качества кластеризации от числа компонент после снижения размерности при параметре \(t = 0.4\), что соответствует умеренному уровню перекрытия между кластерами. Этот сценарий позволяет оценить способность методов сохранять полезную кластерную структуру без избыточной плотности или разреженности данных.
+
+            Исходя из графиков, можно выделить явного лидера -- метод PCA, который стабильно показывает максимальные значения метрик (порядка 0.9 и выше) при любом количестве оставляемых компонент. Это указывает на эффективное сохранение линейной структуры синтетических данных, особенно в случаях, когда кластеры умеренно разделены. MDS, а также ISOMAP и UMAP, дают сопоставимо высокие результаты, практически не зависящие от количества компонент, что говорит о слабой деградации качества даже при сильном снижении размерности данных.
+            Locally Linear Embeddings и Spectral Embeddings, напротив, демонстрируют выраженную чувствительность к размерности. С уменьшением числа компонент качество кластеризации постепенно улучшается и достигает пика на размерности равной числу заложенных кластеров.
 
 
+            \begin{figure}[H]\centering
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts/detailed_decomposition_metric_t_0.4_p_2_comparison_2_clusters_ami.png}
+                    \label{subfig:synthetic:t_0.4:dim_influence:ami}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts/detailed_decomposition_metric_t_0.4_p_2_comparison_2_clusters_ari.png}
+                    \label{subfig:synthetic:t_0.4:dim_influence:ari}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts/detailed_decomposition_metric_t_0.4_p_2_comparison_2_clusters_nmi.png}
+                    \label{subfig:synthetic:t_0.4:dim_influence:nmi}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts/detailed_decomposition_metric_t_0.4_p_2_comparison_2_clusters_nmi.png}
+                    \label{subfig:synthetic:t_0.4:dim_influence:time}
+                }
+                \caption{Анализ влияния размерности данных при различных методах снижения размерности на кластеризацию синтетического набора данных с параметром \(t = 0.4\). Линия Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности. Результаты для
+                    \subref{subfig:synthetic:t_0.4:dim_influence:ami} AMI;
+                    \subref{subfig:synthetic:t_0.4:dim_influence:ari} ARI;
+                    \subref{subfig:synthetic:t_0.4:dim_influence:nmi} NMI, а также на время работы алгоритма \subref{subfig:synthetic:t_influence:time}.
+                }
+                \label{fig:synthetic:t_0.4:dim_influence}
+            \end{figure}
 
-    \begin{figure}[H]\centering
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_ami.png}
-            \label{subfig:clusters_2:t_0.4:pca:ami}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_ari.png}
-            \label{subfig:clusters_2:t_0.4:pca:ari}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_nmi.png}
-            \label{subfig:clusters_2:t_0.4:pca:nmi}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_pca_0.4_2_clusters_time.png}
-            \label{subfig:clusters_2:t_0.4:pca:time}
-        }
-        \caption{Влияние параметра расстояния Минковского \(p\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). PCA используется в качестве метода снижения размерности. Результаты для
-            \subref{subfig:clusters_2:t_0.4:pca:ami} AMI;
-            \subref{subfig:clusters_2:t_0.4:pca:ari} ARI;
-            \subref{subfig:clusters_2:t_0.4:pca:nmi} NMI, а также на время работы алгоритма \subref{subfig:clusters_2:t_0.4:pca:time}.
-        }
-        \label{subfig:clusters_2:t_0.4:pca:metric}
-    \end{figure}
+            На рисунке \ref{fig:synthetic:t_0.8:dim_influence} представлен анализ влияния количества компонент, оставляемых после снижения размерности, на качество кластеризации при фиксированном значении параметра \(t = 0.8\), соответствующем сильному перекрытию кластеров. На этом уровне разделимость между группами минимальна, что делает задачу особенно чувствительной к качеству понижения размерности. Также, следует, что методы PCA демонстрирует наилучшую устойчивость и качество кластеризации вне зависимости от числа компонент. В противоположность, методы Locally Linear Embeddings и Spectral Embeddings показывают низкие и слабо возрастающие значения всех метрик при уменьшении количества компонент, что говорит о неэффективном представлении кластерной структуры в условиях высокой плотности и перекрытия.
 
+            Таким образом, при высоком уровне наложения кластеров (большое t) и варьируемом числе компонент, наиболее стабильные и надёжные результаты обеспечивают методы PCA и MDS. Остальные методы, особенно LLE и Spectral, оказываются крайне чувствительными к размерности и не рекомендованы к применению в таких условиях.
 
-    \begin{figure}[H]\centering
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_ami.png}
-            \label{subfig:clusters_2:t_0.4:spectral_embeddings:ami}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_ari.png}
-            \label{subfig:clusters_2:t_0.4:spectral_embeddings:ari}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_nmi.png}
-            \label{subfig:clusters_2:t_0.4:spectral_embeddings:nmi}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_spectral_embeddings_0.4_2_clusters_time.png}
-            \label{subfig:clusters_2:t_0.4:spectral_embeddings:time}
-        }
-        \caption{Влияние параметра расстояния Минковского \(p\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). SE используется в качестве метода снижения размерности. Результаты для
-            \subref{subfig:clusters_2:t_0.4:spectral_embeddings:ami} AMI;
-            \subref{subfig:clusters_2:t_0.4:spectral_embeddings:ari} ARI;
-            \subref{subfig:clusters_2:t_0.4:spectral_embeddings:nmi} NMI, а также на время работы алгоритма \subref{subfig:clusters_2:t_0.4:spectral_embeddings:time}.
-        }
-        \label{subfig:clusters_2:t_0.4:spectral_embeddings:metric}
-    \end{figure}
+            \begin{figure}[H]\centering
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts/detailed_decomposition_metric_t_0.8_p_2_comparison_2_clusters_ami.png}
+                    \label{subfig:synthetic:t_0.8:dim_influence:ami}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts/detailed_decomposition_metric_t_0.8_p_2_comparison_2_clusters_ari.png}
+                    \label{subfig:synthetic:t_0.8:dim_influence:ari}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts/detailed_decomposition_metric_t_0.8_p_2_comparison_2_clusters_nmi.png}
+                    \label{subfig:synthetic:t_0.8:dim_influence:nmi}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts/detailed_decomposition_metric_t_0.8_p_2_comparison_2_clusters_nmi.png}
+                    \label{subfig:synthetic:t_0.8:dim_influence:time}
+                }
+                \caption{Анализ влияния размерности данных при различных методах снижения размерности на кластеризацию синтетического набора данных с параметром \(t = 0.8\). Линия Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности. Результаты для
+                    \subref{subfig:synthetic:t_0.8:dim_influence:ami} AMI;
+                    \subref{subfig:synthetic:t_0.8:dim_influence:ari} ARI;
+                    \subref{subfig:synthetic:t_0.8:dim_influence:nmi} NMI, а также на время работы алгоритма \subref{subfig:synthetic:t_influence:time}.
+                }
+                \label{fig:synthetic:t_0.8:dim_influence}
+            \end{figure}
 
+            Таким образом, эксперимент подтвердил, что даже в условиях идеальной геометрии кластеров агрессивное снижение размерности способно существенно нарушить пространственную структуру, необходимую для корректной работы \kmeans{}. Наиболее устойчивыми к снижению размерности оказались методы PCA и MDS. Это подчёркивает важность выбора метода снижения размерности в зависимости от допустимой степени искажения данных при сохранении кластерной структуры.
 
-    \begin{figure}[H]\centering
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_ami.png}
-            \label{subfig:clusters_2:t_0.4:umap:ami}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_ari.png}
-            \label{subfig:clusters_2:t_0.4:umap:ari}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_nmi.png}
-            \label{subfig:clusters_2:t_0.4:umap:nmi}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/distance_metric_comparison_umap_0.4_2_clusters_time.png}
-            \label{subfig:clusters_2:t_0.4:umap:time}
-        }
-        \caption{Влияние параметра расстояния Минковского \(p\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). UMAP используется в качестве метода снижения размерности. Результаты для
-            \subref{subfig:clusters_2:t_0.4:umap:ami} AMI;
-            \subref{subfig:clusters_2:t_0.4:umap:ari} ARI;
-            \subref{subfig:clusters_2:t_0.4:umap:nmi} NMI, а также на время работы алгоритма \subref{subfig:clusters_2:t_0.4:umap:time}.
-        }
-        \label{subfig:clusters_2:t_0.4:umap:metric}
-    \end{figure}
+        \subsubsection{Анализ поведения методов снижения кластеризации при сближении кластеров.}
+            В данной части экспериментов особое внимание уделяется анализу устойчивости и адаптивности различных методов снижения размерности в условиях, когда кластеры в данных становятся всё менее различимыми -- то есть постепенно сближаются в пространстве признаков. Синтетическая модель, построенная как смесь нормальных распределений с контролируемым расстоянием между центрами кластеров, позволяет формализованно варьировать степень перекрытия кластеров с помощью параметра \(t\), не изменяя другие характеристики выборки.
 
-    \subsubsection{Влияние методов снижения размерности на качество кластеризации фиксированном значении параметра расстояния Минсковского}
+            В условиях, когда \(t < 0\), центры кластеров максимально удаляются друг от друга без пересечений, что соответствует идеальному случаю для алгоритма \kmeans{}. По мере увеличения значения \(t\) до \(1\) центры притягиваются к общему центру масс, и границы между кластерами становятся всё менее чёткими, что моделирует реальные сценарии, в которых классы могут частично перекрываться. Такой подход позволяет объективно оценить, насколько методы понижения размерности сохраняют или теряют разделимость между группами при убывающем межкластерном расстоянии.
 
-    На графиках ниже представлены результаты экспериментов по оценке поведения различных методов снижения размерности при фиксированном параметре метрики Минковского \(p=0.5\) \ref{subfig:clusters_2:t_0.4:p_0.5:distance}.
+            Результаты экспериментов продемонстрированы на рисунке \ref{fig:synthetic:t_influence}, и показали высокую степень чувствительности к росту перекрытия кластеров.
 
+            При анализе показателей AMI, ARI и NMI можно наблюдать устойчивое превосходство методов MDS, ISOMAP и UMAP на всех значениях параметра \(t\), особенно в областях, где кластеры хорошо разделены (\(t < 0.4\)). Эти методы демонстрируют почти идеальное восстановление кластерной структуры при низких значениях \(t\), что соответствует высокой степени отделённости кластеров. С увеличением \(t\) все методы, за исключением Spectral Embeddings и Locally Linear Embeddings (LLE), относительно стабильно теряют качество, однако сохраняют приемлемый уровень информативности вплоть до \(t \approx 0.6\). В то же время, методы Spectral и LLE показывают значительно худшие показатели на всех интервалах \(t\), демонстрируя явную нестабильность и уязвимость к изменению межкластерного расстояния.
 
-    \begin{figure}[H]\centering
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/decomposition_metric/decomposition_metric_t_0.4_p_0.5_comparison_2_clusters_ami.png}
-            \label{subfig:clusters_2:t_0.4:p_0.5:ami}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/decomposition_metric/decomposition_metric_t_0.4_p_0.5_comparison_2_clusters_ari.png}
-            \label{subfig:clusters_2:t_0.4:p_0.5:ari}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/decomposition_metric/decomposition_metric_t_0.4_p_0.5_comparison_2_clusters_nmi.png}
-            \label{subfig:clusters_2:t_0.4:p_0.5:nmi}
-        }
-        \subfigure[]{
-            \includegraphics[width=0.48\linewidth]{images/decomposition_metric/decomposition_metric_t_0.4_p_0.5_comparison_2_clusters_time.png}
-            \label{subfig:clusters_2:t_0.4:p_0.5:time}
-        }
-        \caption{Анализ влияния различных методов снижения размерности данных при фиксированном расстояния Минковского \(p=0.5\) на качество кластеризации 100 20-мерных объектов, сгенерированных вокруг 2 центров с параметром сближения кластеров \(t=0.4\). Результаты для
-            \subref{subfig:clusters_2:t_0.4:p_0.5:ami} AMI;
-            \subref{subfig:clusters_2:t_0.4:p_0.5:ari} ARI;
-            \subref{subfig:clusters_2:t_0.4:p_0.5:nmi} NMI, а также на время работы алгоритма \subref{subfig:clusters_2:t_0.4:umap:time}.
-        }
-        \label{subfig:clusters_2:t_0.4:p_0.5:distance}
-    \end{figure}
+            Особенно интересным является пик значений метрик (в районе \(t = 0.4\)) для Spectral и LLE, что может быть обусловлено локальным улучшением связности графов при частичном сближении кластеров. Однако после этого значения происходит резкое падение метрик, особенно AMI и NMI, указывающее на неспособность этих методов сохранять глобальную структуру данных при сильном перекрытии.
 
+            С точки зрения времени выполнения, наиболее ресурсоёмкими методами оказались Spectral Embeddings и ISOMAP, особенно в зонах частичного перекрытия кластеров. Напротив, PCA, MDS и UMAP демонстрируют не только высокое качество кластеризации, но и эффективность по времени, что делает их особенно предпочтительными для задач, требующих баланса между точностью и скоростью.
 
+            Таким образом, в условиях постепенно сближающихся кластеров методы MDS, UMAP и ISOMAP оказываются наиболее надёжными как по качеству кластеризации, так и по вычислительным затратам. Методы Spectral и LLE, напротив, показали нестабильное поведение и склонность к деградации качества при увеличении параметра \(t\).
 
+            \begin{figure}[H]\centering
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts/t_comparison_decomposition_20_p_2_comparison_2_clusters_ami.png}
+                    \label{subfig:synthetic:t_influence:ami}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts/t_comparison_decomposition_20_p_2_comparison_2_clusters_ari.png}
+                    \label{subfig:synthetic:t_influence:ari}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts/t_comparison_decomposition_20_p_2_comparison_2_clusters_nmi.png}
+                    \label{subfig:synthetic:t_influence:nmi}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts/t_comparison_decomposition_20_p_2_comparison_2_clusters_time.png}
+                    \label{subfig:synthetic:t_influence:time}
+                }
+                \caption{Анализ влияния различных методов снижения размерности данных на кластеризацию синтетического набора данных при сближении и отдалении центров кластеров. Результаты для
+                    \subref{subfig:synthetic:t_influence:ami} AMI;
+                    \subref{subfig:synthetic:t_influence:ari} ARI;
+                    \subref{subfig:synthetic:t_influence:nmi} NMI, а также на время работы алгоритма \subref{subfig:synthetic:t_influence:time}.
+                }
+                \label{fig:synthetic:t_influence}
+            \end{figure}
 
+            Таким образом, анализ на синтетических данных подтвердил, что эффективность методов снижения размерности сильно зависит от геометрии и плотности кластеров. Это подчёркивает необходимость адаптивного выбора метода снижения размерности в зависимости от ожидаемой сложности кластерной структуры в данных.
 
+    \subsection{Эксперименты на реальных данных}
+
+        Также предложенный подход был исследован на реальных данных. Для этого было решено использовать несколько стандартных наборов данных:
+
+        \begin{itemize}
+            \item Breast Cancer,
+            \item Digits,
+            \item Wine.
+        \end{itemize}
+
+        \subsubsection{Результаты алгоритма на наборе данных Breast Cancer.}
+            Breast Cancer - это стандартный набор данных для бинарной классификации, часто используемый в задачах медицинской диагностики. Данные содержат результаты измерений опухолей молочной железы, полученные при помощи тонкоигольной аспирационной биопсии (FNA). Каждая запись включает характеристики клеточных ядер, такие как радиус, текстура, периметр и другие морфологические признаки.
+
+            \begin{table}[H]
+                \centering
+                \caption{Характеристики набора данных Breast Cancer.}
+                \begin{tabular}{ccc}
+                    \toprule
+                    Число классов & Число объектов & Размерность пространства \\
+                    \midrule
+                    2 & 569 & 30 \\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+
+            Набор данных Breast Cancer представляет собой матрицу размерностью 569x30, где каждая строка соответствует отдельному образцу опухоли, а каждый столбец содержит числовое значение одного из диагностических признаков. Целевая переменная указывает на доброкачественность (benign) или злокачественность (malignant) новообразования. Данные часто используются для обучения моделей машинного обучения, направленных на автоматизацию диагностики рака молочной железы.
+
+            \begin{figure}[H]\centering
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts_real/real_data_breast_cancer_ami.png}
+                    \label{subfig:breast_cancer:ami}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts_real/real_data_breast_cancer_ari.png}
+                    \label{subfig:breast_cancer:ari}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts_real/real_data_breast_cancer_nmi.png}
+                    \label{subfig:breast_cancer:nmi}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts_real/real_data_breast_cancer_time.png}
+                    \label{subfig:breast_cancer:time}
+                }
+                \caption{Анализ влияния различных методов снижения размерности данных на кластеризацию набора данных Breast Cancer. Линия Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности. Результаты для
+                    \subref{subfig:breast_cancer:ami} AMI;
+                    \subref{subfig:breast_cancer:ari} ARI;
+                    \subref{subfig:breast_cancer:nmi} NMI, а также на время работы алгоритма \subref{subfig:breast_cancer:time}.
+                }
+                \label{fig:breast_cancer}
+            \end{figure}
+
+            На рисунке \ref{fig:breast_cancer} представлены результаты применения различных методов снижения размерности перед кластеризацией K-Means на наборе данных Breast Cancer. Наиболее заметную положительную динамику продемонстрировали методы Locally Linear Embedding (LLE) и Spectral Embedding -- при уменьшении размерности до 10 и ниже наблюдается последовательный рост метрик кластеризации: AMI, ARI и NMI. Пиковые значения достигаются в точке, где число компонент совпадает с числом кластеров в выборке, что может свидетельствовать о более точной структурной декомпозиции, когда размерность пространства отражает истинное количество скрытых групп. В то же время алгоритмы PCA и MDS демонстрируют стабильные показатели качества, близкие к базовому сценарию кластеризации без предварительного снижения размерности. Это указывает на то, что оба метода хорошо сохраняют глобальную структуру данных, которая является ключевой для работы алгоритма K-Means. Особенно стоит отметить MDS, который обеспечивает не только стабильность качества, но и высокую воспроизводимость результатов на всем диапазоне размерностей. Такое поведение подтверждает различия в подходах: методы LLE и Spectral Embedding склонны акцентировать внимание на локальных взаимосвязях между точками, что делает их полезными при сильной редукции, в то время как PCA и MDS сохраняют глобальную топологию, важную для более устойчивой кластеризации.
+
+        \subsubsection{Результаты алгоритма на наборе данных Digits.}
+            Digits - это стандартный набор данных для многоклассовой классификации, часто используемый в задачах распознавания образов. Данные представляют собой рукописные цифры от 0 до 9, оцифрованные в виде изображений 8x8 пикселей. Каждое изображение преобразовано в матрицу чисел, отражающих интенсивность оттенков серого.
+
+            \begin{table}[H]
+                \centering
+                \caption{Характеристики набора данных Digits.}
+                \begin{tabular}{ccc}
+                    \toprule
+                    Число классов & Число объектов & Размерность пространства \\
+                    \midrule
+                    10 & 1797 & 64 \\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+
+            Набор данных Digits представляет собой матрицу размерностью 1797x64, где каждая строка соответствует одному изображению цифры, а каждый столбец содержит значение яркости пикселя (от 0 до 16). Исходные изображения были нормализованы для уменьшения влияния вариаций наклона и толщины линий.
+
+            \begin{figure}[H]\centering
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts_real/real_data_digits_ami.png}
+                    \label{subfig:digits:ami}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts_real/real_data_digits_ari.png}
+                    \label{subfig:digits:ari}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts_real/real_data_digits_nmi.png}
+                    \label{subfig:digits:nmi}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts_real/real_data_digits_time.png}
+                    \label{subfig:digits:time}
+                }
+                \caption{Анализ влияния различных методов снижения размерности данных на кластеризацию набора данных Digits. Линия Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности. Результаты для
+                    \subref{subfig:digits:ami} AMI;
+                    \subref{subfig:digits:ari} ARI;
+                    \subref{subfig:digits:nmi} NMI, а также на время работы алгоритма \subref{subfig:digits:time}.
+                }
+                \label{fig:digits}
+            \end{figure}
+
+            На рисунке \ref{fig:digits} представлены результаты экспериментов на датасете Digits. Следует отметить, что из-за ограничений существующей программной реализации методы MDS и Locally Linear Embedding не смогли корректно выполнить процедуру снижения размерности на этом наборе данных и, таким образом, были исключены из анализа. Среди протестированных алгоритмов ярким лидером оказался ISOMAP, который уверенно превзошёл остальные методы по всем основным метрикам кластеризации - AMI, ARI и NMI. Он продемонстрировал стабильное превосходство над базовой линией (результат кластеризации без снижения размерности) вплоть до размерности в 2 компоненты, что говорит о его способности сохранять глобальную геометрию данных даже в сильно сжатом пространстве. Метод PCA продемонстрировал устойчивую деградацию качества кластеризации при уменьшении числа компонент, особенно заметную ниже порога в 10 компонент. Это отражает его ограниченность в улавливании нелинейных зависимостей в данных. Spectral Embedding, напротив, показал результаты в целом ниже уровня базового \kmeans{}, что может объясняться тем, что он оптимизирует локальные отношения между точками, а не глобальную структуру. Тем не менее, на размерности, равной числу кластеров, наблюдался кратковременный всплеск метрик, что, вероятно, связано с тем, что алгоритм эффективно извлекает локальные кластеры, когда размерность достаточно для сохранения этих структур. Также была выявлена интересная зависимость по времени выполнения: ISOMAP, несмотря на свою сложность, в среднем демонстрировал сравнительно низкое время работы с редкими всплесками, что делает его не только точным, но и потенциально пригодным для практического применения при разумной конфигурации.
+
+        \subsubsection{Результаты алгоритма на наборе данных Wine.}
+            Wine - это стандартный и простой набор данных для многоклассовой классификации. Эти данные являются результатами химического анализа вин, выращенных в одном и том же регионе Италии тремя разными производителями. Существует тринадцать различных измерений, проведенных для различных компонентов, содержащихся в трех сортах вина.
+
+            \begin{table}[H]
+                \centering
+                \caption{Характеристики набора данных Wine.}
+                \begin{tabular}{ccc}
+                    \toprule
+                    Число классов &   Число объектов &   Размерность пространства \\
+                    \midrule
+                    3    &  178 &  13 \\
+                    \bottomrule
+                \end{tabular}
+            \end{table}
+
+            Набор данных Wine представляет собой матрицу с размерностью 178x13, где каждая строка соответствует отдельному образцу вина, а каждый столбец содержит значение конкретного химического измерения.
+
+            \begin{figure}[H]\centering
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts_real/real_data_wine_ami.png}
+                    \label{subfig:wine:ami}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts_real/real_data_wine_ari.png}
+                    \label{subfig:wine:ari}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts_real/real_data_wine_nmi.png}
+                    \label{subfig:wine:nmi}
+                }
+                \subfigure[]{
+                    \includegraphics[width=0.48\linewidth]{images/charts_real/real_data_wine_time.png}
+                    \label{subfig:wine:time}
+                }
+                \caption{Анализ влияния различных методов снижения размерности данных на кластеризацию набора данных Wine. Линия Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности. Результаты для
+                    \subref{subfig:wine:ami} AMI;
+                    \subref{subfig:wine:ari} ARI;
+                    \subref{subfig:wine:nmi} NMI, а также на время работы алгоритма \subref{subfig:wine:time}.
+                }
+                \label{fig:wine}
+            \end{figure}
+
+            На рисунке \ref{fig:wine} представлены результаты экспериментов по кластеризации с предварительным снижением размерности на наборе данных Wine. Анализ показал, что методы PCA, ISOMAP и UMAP обеспечивают устойчивое поведение метрик, оставаясь на уровне или вблизи базовой линии на всем диапазоне компонент. Однако, несмотря на эту стабильность, они не продемонстрировали прироста качества кластеризации при уменьшении размерности. В то же время, методы Locally Linear Embedding (LLE) и Spectral Embedding показали заметное улучшение показателей AMI, ARI и NMI при переходе к малым числам компонент (2–4). Это указывает на их способность извлекать более информативную структуру данных в условиях значительного снижения размерности. Тем не менее, даже при росте метрик, их абсолютные значения остаются ниже по сравнению с другими методами, что ограничивает их практическую эффективность в этом конкретном примере. Важно отметить интересную закономерность: как ISOMAP, так и UMAP демонстрируют снижение качества кластеризации при переходе к размерностям, меньшим, чем реальное количество классов в выборке. Это может быть связано с потерей кластерной структуры, <<неукладывающейся>> в сжатое пространство. Такая деградация указывает на важность учета семантической емкости признакового пространства при выборе числа компонент. По времени выполнения алгоритма наилучшую стабильность и скорость показали MDS и PCA, что делает их предпочтительными с точки зрения вычислительной эффективности, особенно в сценариях, где время критично.
 
 
 
@@ -235,7 +323,7 @@ f(x) = \sum_{l=1}^k p_lf_l(x), \quad x=(x^1,x^2, \dots,x^d),  p_l>0, \sum_{l=1}^
 %         \mu_2 = (4, 0, 0, \dots).
 %     \end{gather*}
 
-%     \paragraph{Метрика Минковского с параметром $p=2$}
+%     \subsubsection{Метрика Минковского с параметром $p=2$}
 %     Результаты работа алгоритма кластеризации для метрики Минковского с параметром $p=2$ на данных, состоящих из 2 кластеров с коэффициентом сближения $t=0.8$, представлены на рисунке \ref{fig:n2:m2:alpha_influence}. Алгоритм HardSSLKMeans с фиксацией объектов с известными метками в их кластерах показывает значительно лучшую скорость схождения, а также более высокие результаты по всем рассматриваемым метрикам: \textit{Accuracy}, \textit{ARI}, \textit{AMI}, \textit{NMI}. Очевидно, что при добавлении учителя качество кластеризации должно улучшаться.
 %     В таблице \ref{tab:n2:m2:alpha_influence} представлено сравнение числовых значений рассматриваемых метрик. HardSSLKMeans показал \textit{Accuracy} 0.77, что на 67.39\% лучше алгоритма кластеризации без использования учителя.
 

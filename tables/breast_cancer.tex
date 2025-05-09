@@ -1,7 +1,7 @@
 % pca
 \begin{table}[H]
     \centering
-    \caption{Результаты экспериментов по исследованию влиянию метода снижения размерности PCA на кластеризацию набора данных Breast Cancer. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
+    \caption{Результаты экспериментов по исследованию влияния метода снижения размерности PCA на кластеризацию набора данных Breast Cancer. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
     \label{tab:breast_cancer:pca}
     \small
 
@@ -9,14 +9,14 @@
 
         \toprule
         \bfseries Алгоритм &
-        \bfseries Число компонент \(d_{target}\) &
+        \bfseries Число компонент &
         \bfseries ARI &
         \bfseries AMI &
         \bfseries NMI &
         \bfseries Время \\
 
         \midrule
-        Baseline & -- & \bfseries 0.49 & \bfseries 0.46 & \bfseries 0.46 & 0.28 \\
+        Baseline & 30 & \bfseries 0.49 & \bfseries 0.46 & \bfseries 0.46 & 0.28 \\
 
         \midrule
         \multirow{18}*{PCA}
@@ -46,7 +46,7 @@
 % Spectral
 \begin{table}[H]
     \centering
-    \caption{Результаты экспериментов по исследованию влиянию метода снижения размерности Spectral Embeddings на кластеризацию набора данных Breast Cancer. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
+    \caption{Результаты экспериментов по исследованию влияния метода снижения размерности Spectral Embeddings на кластеризацию набора данных Breast Cancer. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
     \label{tab:breast_cancer:se}
     \small
 
@@ -54,14 +54,14 @@
 
         \toprule
         \bfseries Алгоритм &
-        \bfseries Число компонент \(d_{target}\) &
+        \bfseries Число компонент &
         \bfseries ARI &
         \bfseries AMI &
         \bfseries NMI &
         \bfseries Время \\
 
         \midrule
-        Baseline & -- & \bfseries 0.49 & \bfseries 0.46 & \bfseries 0.46 & 0.28 \\
+        Baseline & 30 & \bfseries 0.49 & \bfseries 0.46 & \bfseries 0.46 & 0.28 \\
 
         \midrule
         \multirow{18}*{Spectral Embeddings}
@@ -91,7 +91,7 @@
 
 \begin{table}[H]
     \centering
-    \caption{Результаты экспериментов по исследованию влиянию метода снижения размерности Locally Linear Embeddings на кластеризацию набора данных Breast Cancer. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
+    \caption{Результаты экспериментов по исследованию влияния метода снижения размерности Locally Linear Embeddings на кластеризацию набора данных Breast Cancer. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
     \label{tab:breast_cancer:lle}
     \small
 
@@ -99,14 +99,14 @@
 
         \toprule
         \bfseries Алгоритм &
-        \bfseries Число компонент \(d_{target}\) &
+        \bfseries Число компонент &
         \bfseries ARI &
         \bfseries AMI &
         \bfseries NMI &
         \bfseries Время \\
 
         \midrule
-        Baseline & -- & \bfseries 0.49 & \bfseries 0.46 & \bfseries 0.46 & 0.28 \\
+        Baseline & 30 & \bfseries 0.49 & \bfseries 0.46 & \bfseries 0.46 & 0.28 \\
 
         \midrule
         \multirow{18}*{Locally Linear Embeddings}
@@ -134,7 +134,7 @@
 
 \begin{table}[H]
     \centering
-    \caption{Результаты экспериментов по исследованию влиянию метода снижения размерности MDS на кластеризацию набора данных Breast Cancer. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
+    \caption{Результаты экспериментов по исследованию влияния метода снижения размерности MDS на кластеризацию набора данных Breast Cancer. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
     \label{tab:breast_cancer:mds}
     \small
 
@@ -142,14 +142,14 @@
 
         \toprule
         \bfseries Алгоритм &
-        \bfseries Число компонент \(d_{target}\) &
+        \bfseries Число компонент &
         \bfseries ARI &
         \bfseries AMI &
         \bfseries NMI &
         \bfseries Время \\
 
         \midrule
-        Baseline & -- & \bfseries 0.49 & \bfseries 0.46 & \bfseries 0.46 & 0.28 \\
+        Baseline & 30 & \bfseries 0.49 & \bfseries 0.46 & \bfseries 0.46 & 0.28 \\
 
         \midrule
         \multirow{18}*{MDS}
@@ -179,7 +179,7 @@
 
 \begin{table}[H]
     \centering
-    \caption{Результаты экспериментов по исследованию влиянию метода снижения размерности ISOMAP на кластеризацию набора данных Breast Cancer. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
+    \caption{Результаты экспериментов по исследованию влияния метода снижения размерности ISOMAP на кластеризацию набора данных Breast Cancer. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
     \label{tab:breast_cancer:isomap}
     \small
 
@@ -187,14 +187,14 @@
 
         \toprule
         \bfseries Алгоритм &
-        \bfseries Число компонент \(d_{target}\) &
+        \bfseries Число компонент &
         \bfseries ARI &
         \bfseries AMI &
         \bfseries NMI &
         \bfseries Время \\
 
         \midrule
-        Baseline & -- & \bfseries 0.49 & \bfseries 0.46 & \bfseries 0.46 & 0.28 \\
+        Baseline & 30 & \bfseries 0.49 & \bfseries 0.46 & \bfseries 0.46 & 0.28 \\
 
         \midrule
         \multirow{18}*{ISOMAP}
@@ -224,7 +224,7 @@
 
 \begin{table}[H]
     \centering
-    \caption{Результаты экспериментов по исследованию влиянию метода снижения размерности UMAP на кластеризацию набора данных Breast Cancer. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
+    \caption{Результаты экспериментов по исследованию влияния метода снижения размерности UMAP на кластеризацию набора данных Breast Cancer. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
     \label{tab:breast_cancer:umap}
     \small
 
@@ -232,14 +232,14 @@
 
         \toprule
         \bfseries Алгоритм &
-        \bfseries Число компонент \(d_{target}\) &
+        \bfseries Число компонент &
         \bfseries ARI &
         \bfseries AMI &
         \bfseries NMI &
         \bfseries Время \\
 
         \midrule
-        Baseline & -- & \bfseries 0.49 & \bfseries 0.46 & \bfseries 0.46 & 0.28 \\
+        Baseline & 30 & \bfseries 0.49 & \bfseries 0.46 & \bfseries 0.46 & 0.28 \\
 
         \midrule
         \multirow{18}*{UMAP}

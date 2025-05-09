@@ -1,7 +1,7 @@
 % pca
 \begin{table}[H]
     \centering
-    \caption{Результаты экспериментов по исследованию влиянию метода снижения размерности PCA на кластеризацию набора данных Digits. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
+    \caption{Результаты экспериментов по исследованию влияния метода снижения размерности PCA на кластеризацию набора данных Digits. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
     \label{tab:digits:pca}
     \small
 
@@ -9,14 +9,14 @@
 
         \toprule
         \bfseries Алгоритм &
-        \bfseries Число компонент \(d_{target}\) &
+        \bfseries Число компонент &
         \bfseries ARI &
         \bfseries AMI &
         \bfseries NMI &
         \bfseries Время \\
 
         \midrule
-        Baseline & -- & 0.62 & 0.72 & 0.72 & 11.88 \\
+        Baseline & 64 & 0.62 & 0.72 & 0.72 & 11.88 \\
 
         \midrule
         \multirow{18}*{PCA}
@@ -46,7 +46,7 @@
 % Spectral
 \begin{table}[H]
     \centering
-    \caption{Результаты экспериментов по исследованию влиянию метода снижения размерности Spectral Embeddings на кластеризацию набора данных Digits. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
+    \caption{Результаты экспериментов по исследованию влияния метода снижения размерности Spectral Embeddings на кластеризацию набора данных Digits. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
     \label{tab:digits:se}
     \small
 
@@ -54,14 +54,14 @@
 
         \toprule
         \bfseries Алгоритм &
-        \bfseries Число компонент \(d_{target}\) &
+        \bfseries Число компонент &
         \bfseries ARI &
         \bfseries AMI &
         \bfseries NMI &
         \bfseries Время \\
 
         \midrule
-        Baseline & -- & 0.62 & 0.72 & 0.72 & 11.88 \\
+        Baseline & 64 & 0.62 & 0.72 & 0.72 & 11.88 \\
 
         \midrule
         \multirow{18}*{Spectral Embeddings}
@@ -90,7 +90,7 @@
 
 \begin{table}[H]
     \centering
-    \caption{Результаты экспериментов по исследованию влиянию метода снижения размерности ISOMAP на кластеризацию набора данных Digits. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
+    \caption{Результаты экспериментов по исследованию влияния метода снижения размерности ISOMAP на кластеризацию набора данных Digits. Baseline -- результат работы алгоритма \kmeans{} без предварительного снижения размерности.}
     \label{tab:digits:isomap}
     \small
 
@@ -98,14 +98,14 @@
 
         \toprule
         \bfseries Алгоритм &
-        \bfseries Число компонент \(d_{target}\) &
+        \bfseries Число компонент &
         \bfseries ARI &
         \bfseries AMI &
         \bfseries NMI &
         \bfseries Время \\
 
         \midrule
-        Baseline & -- & 0.62 & 0.72 & 0.72 & 11.88 \\
+        Baseline & 64 & 0.62 & 0.72 & 0.72 & 11.88 \\
 
         \midrule
         \multirow{18}*{ISOMAP}

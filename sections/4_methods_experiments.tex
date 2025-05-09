@@ -1,45 +1,152 @@
 \section{Предложенный метод}
+    Одним из способов решения проблемы <<проклятия размерности>> является применения этапа предварительного снижения размерности, позволяющий компактно представить данные в пространстве с меньшей размерностью, сохранив при этом ключевую топологическую структуру (Алгоритм \ref{alg:main_algo}).
 
-% \hl{Описание алгоритма, таблички с результатами}
+    \begin{algorithm}[H]
+        \small
+        \caption{Кластеризация с предварительным снижением размерности}
+        \label{alg:main_algo}
+        \begin{algorithmic}
+            \State \(k\) : Количество классов
+            \State \(X\) : Множество объектов
+            \State \(d_{target}\): Размерность пространства, в котором будет производиться кластеризация
+            \State \(C=\{C_1, C_2, \dots, C_k\}\) : Разбиение на кластеры
+            \State \(c=\{c_1, c_2, \dots, c_k\}\) : Центры кластеров
+            \State \(Processor()\) : Выбранный метод снижения размерности
+            \Statex
+            \State \(X_{d_{target}} \gets Processor(X, d_{target})\) -- применить метод снижения размерности в пространство размерности \(d_{target}\) для данных \(X\)
+            \State Выбрать случайным образом \(k\) центров кластеров из \(X_{d_{target}}\)
+            \While{центры не стабилизировались}
+                \For{точка \(x\in X\)}
+                    \State вычислить расстояние до каждого центра \(c\)
+                    \State присвоить \(x\) кластеру с ближайшим центром кластера
+                \EndFor
+                \For{кластер \(C_i \in C\) и центр \(c_i \in c\)}
+                    \State пересчитать центр \(c_i\) кластера как среднее значение из точек внутри кластера \(C_i\)
+                \EndFor
+            \EndWhile
+            \end{algorithmic}
+    \end{algorithm}
 
+    Алгоритм был реализован при использовании языка программирования Python 3.10 и библиотеки \textit{numpy (1.24.3)}, \textit{scikit-learn (1.2.0)}, \textit{scipy (1.10.0)}, \textit{umap-learn (0.5.7)}.
+    Для анализа результатов была разработана система автоматической генерации таблиц и графиков с использованием библиотеки \textit{pandas (1.5.2)} и \textit{matplotlib (3.6.2)}.
+    Для анализа качества алгоритма была разработана система автоматического анализа кода и тестирования алгоритма на платформе GitHub Actions. Качество кода проверялось с использованием библиотек \textit{pylint (2.15.9)} и \textit{isort (5.11.4)}. Для тестирования алгоритма были разработаны 168 Unit тестов с использованием библиотеки \textit{pytest (7.2.0)}.
 
-\begin{algorithm}[H]
-    \small
-    \caption{Кластеризация с предварительным снижением размерности}
-    \label{alg:main_algo}
-    \begin{algorithmic}
-        \State \(k\) : Количество классов
-        \State \(X\) : Множество объектов
-        \State \(d_{target}\): Размерность пространства, в котором будет производиться кластеризация
-        \State \(C=\{C_1, C_2, \dots, C_k\}\) : Разбиение на кластеры
-        \State \(c=\{c_1, c_2, \dots, c_k\}\) : Центры кластеров
-        \State \(Processor()\) : Выбранный метод снижения размерности
-        \Statex
-        \State \(X_{d_{target}} \gets Processor(X, d_{target})\) -- применить метод снижения размерности в пространство размерности \(d_{target}\) для данных \(X\)
-        \State Выбрать случайным образом \(k\) центров кластеров из \(X_{d_{target}}\)
-        \While{центры не стабилизировались}
-            \For{точка \(x\in X\)}
-                \State вычислить расстояние до каждого центра \(c\)
-                \State присвоить \(x\) кластеру с ближайшим центром кластера
-            \EndFor
-            \For{кластер \(C_i \in C\) и центр \(c_i \in c\)}
-                \State пересчитать центр \(c_i\) кластера как среднее значение из точек внутри кластера \(C_i\)
-            \EndFor
-        \EndWhile
-        \end{algorithmic}
-\end{algorithm}
+    \subsection{Методы снижения размерности}
+        В качестве методов снижения размерности были исследованы следующие методы:
+        \begin{itemize}
+            \item Principal Component Analysis (PCA),
+            \item Spectral Embeddings (SE),
+            \item Locally Linear Embedding (LLE),
+            \item Multidimensional Scaling (MDS),
+            \item Uniform Manifold Approximation and Projection (UMAP).
+            \item Isometric Mapping (ISOMAP).
+        \end{itemize}
 
-Алгоритм был реализован при использовании языка программирования Python 3.10 и библиотеки \textit{numpy (1.24.3)}, \textit{scikit-learn (1.2.0)}, \textit{scipy (1.10.0)}, \textit{umap-learn (0.5.7)}.
-Для анализа результатов была разработана система автоматической генерации таблиц и графиков с использованием библиотеки \textit{pandas (1.5.2)} и \textit{matplotlib (3.6.2)}.
-Для анализа качества алгоритма была разработана система автоматического анализа кода и тестирования алгоритма на платформе GitHub Actions. Качество кода проверялось с использованием библиотек \textit{pylint (2.15.9)} и \textit{isort (5.11.4)}. Для тестирования алгоритма были разработаны 168 Unit тестов с использованием библиотеки \textit{pytest (7.2.0)}.
+        \paragraph{Метод главных компонент (Principal Component Analysis)}
 
+            \begin{algorithm}[H]
+                \small
+                \caption{Метод главных компонент (PCA)}
+                \label{alg:pca}
+                \begin{algorithmic}
+                \Require Матрица данных \(X \in \mathbb{R}^{m \times n}\) с \(m\) образцами и \(n\) признаками
+                \State \textbf{Шаг 1:} Стандартизация данных: \(X_{\text{std}} = \frac{X - \mu}{\sigma},\)
+                где \(\mu\) -- среднее значение, а \(\sigma\) -- стандартное отклонение каждого признака.
 
-В качестве методов снижения размерности были исследованы следующие методы:
-\begin{itemize}
-    \item Principal Component Analysis (PCA),
-    \item Spectral Embeddings (SE),
-    \item Locally Linear Embedding (LLE),
-    \item Multidimensional Scaling (MDS),
-    \item Uniform Manifold Approximation and Projection (UMAP).
-    \item Isometric Mapping (ISOMAP).
-\end{itemize}
+                \State \textbf{Шаг 2:} Вычисление ковариационной матрицы: \(\Sigma = \frac{1}{n} X_{\text{std}}^T X_{\text{std}}\).
+
+                \State \textbf{Шаг 3:} Вычисление собственных значений и собственных векторов ковариационной матрицы: \(\Sigma v_i = \lambda_i v_i,\), где \(\lambda_i\) -- собственные значения, а \(v_i\) -- собственные векторы.
+
+                \State \textbf{Шаг 4:} Сортировка собственных значений и соответствующих им собственных векторов в порядке убывания \(\lambda_1 \geq \lambda_2 \geq \ldots \geq \lambda_n\)
+
+                \State \textbf{Шаг 5:} Выбор первых \(k\) собственных векторов для формирования матрицы проекции \(W \in \mathbb{R}^{n \times k}\): \(W = [v_1, v_2, \ldots, v_k]\)
+
+                \State \textbf{Шаг 6:} Преобразование исходных данных в новое подпространство: \(Z = X_{\text{std}} W\)
+
+                \State \Return Матрица данных с уменьшенной размерностью \(Z \in \mathbb{R}^{m \times k}\) с \(k\) главными компонентами.
+                \end{algorithmic}
+            \end{algorithm}
+
+        \paragraph{Метод многомерного шкалирования (Multidimensional Scaling)}
+            \begin{algorithm}[H]
+                \small
+                \caption{Метод многомерного шкалирования (MDS)}
+                \label{alg:mds}
+                \begin{algorithmic}
+                \Require Матрица попарных расстояний \(D \in \mathbb{R}^{m \times m}\) между \(m\) объектами
+                \State \textbf{Шаг 1:} Вычисление матрицы квадратов попарных расстояний: \(B = -\frac{1}{2} D^2\)
+                \State \textbf{Шаг 2:} Центрирование матрицы \(B\): \(B = B - \frac{1}{m} \mathbf{1} B - \frac{1}{m} B \mathbf{1} + \frac{1}{m^2} \mathbf{1} B \mathbf{1}\), где \(\mathbf{1}\) -- матрица, заполненная единицами.
+
+                \State \textbf{Шаг 3:} Вычисление собственных значений и собственных векторов матрицы \(B\): \(B v_i = \lambda_i v_i\), где \(\lambda_i\) -- собственные значения, а \(v_i\) -- собственные векторы.
+
+                \State \textbf{Шаг 4:} Сортировка собственных значений и соответствующих им собственных векторов в порядке убывания \(\lambda_1 \geq \lambda_2 \geq \ldots \geq \lambda_m\).
+
+                \State \textbf{Шаг 5:} Выбор первых \(k\) собственных векторов для формирования матрицы проекции \(W \in \mathbb{R}^{m \times k}\): \(W = [v_1, v_2, \ldots, v_k]\).
+
+                \State \textbf{Шаг 6:} Преобразование исходных данных в новое подпространство: \(Z = W \Lambda^{1/2}\), где \(\Lambda\) -- диагональная матрица, содержащая \(k\) наибольших собственных значений.
+
+                \State \Return Матрица данных с уменьшенной размерностью \(Z \in \mathbb{R}^{m \times k}\) с \(k\) измерениями.
+            \end{algorithmic}
+            \end{algorithm}
+
+        \paragraph{Метод Uniform Manifold Approximation and Projection (UMAP)}
+            \begin{algorithm}[H]
+                \small
+                \caption{Метод Uniform Manifold Approximation and Projection (UMAP)}
+                \label{alg:umap}
+                \begin{algorithmic}
+                \Require Матрица данных \(X \in \mathbb{R}^{m \times n}\) с \(m\) образцами и \(n\) признаками
+                \State \textbf{Шаг 1:} Вычисление матрицы ближайших соседей и вероятностной структуры локального графа
+                \State \textbf{Шаг 2:} Построение глобального графа связи (средства соединения локальных графов)
+                \State \textbf{Шаг 3:} Инициализация точек в проекционном пространстве
+                \State \textbf{Шаг 4:} Оптимизация размещения точек с использованием перекрытия распределений
+                \State \Return Матрица данных с уменьшенной размерностью \(Z \in \mathbb{R}^{m \times k}\) с \(k\) измерениями.
+                \end{algorithmic}
+            \end{algorithm}
+
+        \paragraph{Метод Isometric Mapping (Isomap)}
+            \begin{algorithm}[H]
+                \small
+                \caption{Метод Isometric Mapping (Isomap)}
+                \label{alg:isomap}
+                \begin{algorithmic}
+                \Require Матрица данных \(X \in \mathbb{R}^{m \times n}\) с \(m\) образцами и \(n\) признаками
+                \State \textbf{Шаг 1:} Построение графа ближайших соседей (по k ближайшим)
+                \State \textbf{Шаг 2:} Вычисление геодезических расстояний между всеми парами точек (алгоритм Флойда/Дейкстры)
+                \State \textbf{Шаг 3:} Применение MDS к матрице геодезических расстояний
+                \State \Return Матрица данных с уменьшенной размерностью \(Z \in \mathbb{R}^{m \times k}\) с \(k\) измерениями.
+                \end{algorithmic}
+            \end{algorithm}
+
+        \paragraph{Метод Locally Linear Embedding (LLE)}
+
+            \begin{algorithm}[H]
+                \small
+                \caption{Метод Locally Linear Embedding (LLE)}
+                \label{alg:lle}
+                \begin{algorithmic}
+                \Require Матрица данных \(X \in \mathbb{R}^{m \times n}\) с \(m\) образцами и \(n\) признаками
+                \State \textbf{Шаг 1:} Найти \(k\) ближайших соседей для каждого \(x_i\)
+                \State \textbf{Шаг 2:} Решить задачу линейной аппроксимации и найти веса \(w_{ij}\)
+                \State \textbf{Шаг 3:} Построить матрицу весов \(W\) (разреженную)
+                \State \textbf{Шаг 4:} Выбор случайных точек в пространстве меньшей размерности
+                \State \textbf{Шаг 5:} Найти проекции \(y_i\), минимизируя функцию ошибки реконструкции \(\sum_i \|y_i - \sum_j w_{ij} y_j\|^2\)
+                \State \Return Матрица данных с уменьшенной размерностью \(Y \in \mathbb{R}^{m \times k}\) с \(k\) измерениями.
+                \end{algorithmic}
+            \end{algorithm}
+
+        \paragraph{Метод Spectral Embedding (SSE)}
+            \begin{algorithm}[H]
+                \small
+                \caption{Метод Spectral Embedding (SSE)}
+                \label{alg:sse}
+                \begin{algorithmic}
+                \Require Матрица данных \(X \in \mathbb{R}^{m \times n}\) с \(m\) образцами и \(n\) признаками
+                \State \textbf{Шаг 1:} Построение матрицы сходства \(S\)
+                \State \textbf{Шаг 2:} Формирование матрицы Лапласиана \(L = D - S\)
+                \State \textbf{Шаг 3:} Спектральное разложение \(L: L v_i = \lambda_i v_i\)
+                \State \textbf{Шаг 4:} Формирование матрицы проекции \(W = [v_1, \dots, v_k]\)
+                \State \textbf{Шаг 5:} Получение низкоразмерного представления \(Z = W \Lambda^{1/2}\)
+                \State \Return Матрица данных с уменьшенной размерностью \(Z \in \mathbb{R}^{m \times k}\) с \(k\) измерениями.
+                \end{algorithmic}
+            \end{algorithm}

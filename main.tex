@@ -37,17 +37,9 @@
 \usepackage{amsthm}
 
 
-% \begin{document}
-%     \include{macros}
-%     \include{sections/titilepage}
-% \end{document}
-
-
 \begin{document}
 
     \include{macros}
-
-    % \include{report_sections/results}
 
     \include{sections/titilepage}
     \setcounter{page}{2}
@@ -58,6 +50,7 @@
 
     \include{sections/2_literature_review}
 
+    \include{sections/3_problem}
 
     \include{sections/4_methods_experiments}
 
@@ -65,9 +58,8 @@
 
     \include{sections/6_conclusion}
 
-
-\addcontentsline{toc}{section}{Список литературы}
-\nocite{*}
-\bibliographystyle{ref/IEEEannot}
-\bibliography{ref/annot}
+    \addcontentsline{toc}{section}{Список литературы}
+    \nocite{*}
+    \bibliographystyle{ref/IEEEannot}
+    \bibliography{ref/annot}
 \end{document}

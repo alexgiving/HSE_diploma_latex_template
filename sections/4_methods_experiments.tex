@@ -36,7 +36,7 @@
         \begin{itemize}
             \item Principal Component Analysis (PCA),
             \item Spectral Embeddings (SE),
-            \item Locally Linear Embedding (LLE),
+            \item Locally Linear Embeddings (LLE),
             \item Multidimensional Scaling (MDS),
             \item Uniform Manifold Approximation and Projection (UMAP).
             \item Isometric Mapping (ISOMAP).
@@ -150,7 +150,7 @@
             %     \end{algorithmic}
             % \end{algorithm}
 
-        \paragraph{Метод Locally Linear Embedding (LLE)}
+        \paragraph{Метод Locally Linear Embeddings (LLE)}
             Идея LLE заключается в следующем: каждый объект в высокоразмерном пространстве аппроксимируется линейной комбинацией своих ближайших соседей. Предполагается, что на достаточно малых масштабах многообразие можно считать почти линейным. Эти веса затем используются для восстановления представления объекта уже в пространстве меньшей размерности, с сохранением локальной топологии.
             Метод LLE включает следующие этапы:
             \begin{itemize}
@@ -161,7 +161,7 @@
             \end{itemize}
             % \begin{algorithm}[H]
             %     \small
-            %     \caption{Метод Locally Linear Embedding (LLE)}
+            %     \caption{Метод Locally Linear Embeddings (LLE)}
             %     \label{alg:lle}
             %     \begin{algorithmic}
             %     \Require Матрица данных \(X \in \mathbb{R}^{m \times n}\) с \(m\) образцами и \(n\) признаками
@@ -174,7 +174,7 @@
             %     \end{algorithmic}
             % \end{algorithm}
 
-        \paragraph{Метод Spectral Embedding (SSE)}
+        \paragraph{Метод Spectral Embeddings (SSE)}
             Основной идеей метода является построение взвешенного графа ближайших соседей, после чего рассчитывается его нормализованный лапласиан, отражающий топологическую структуру данных. Далее проводится спектральное разложение лапласиана, и проекции объектов на собственные векторы, соответствующие наименьшим собственным значениям, формируют новое пространство признаков пониженной размерности.
             Метод SSE включает следующие этапы:
             \begin{itemize}
@@ -186,7 +186,7 @@
             \end{itemize}
             % \begin{algorithm}[H]
             %     \small
-            %     \caption{Метод Spectral Embedding (SSE)}
+            %     \caption{Метод Spectral Embeddings (SSE)}
             %     \label{alg:sse}
             %     \begin{algorithmic}
             %     \Require Матрица данных \(X \in \mathbb{R}^{m \times n}\) с \(m\) образцами и \(n\) признаками
